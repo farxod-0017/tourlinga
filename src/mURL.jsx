@@ -1,0 +1,1 @@
+export const mURL = "https://apitarjimon.nurazizcom.uz/api"

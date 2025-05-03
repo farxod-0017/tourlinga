@@ -1,0 +1,125 @@
+.advan {
+    margin-bottom: 64px;
+}
+
+.container_advan {
+    max-width: 1472px;
+    padding: 0 16px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.advan_wrap {
+    padding: 96px 112px;
+    border-radius: 12px;
+    background-color: white;
+}
+
+.advan_wrap h5 {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: 0%;
+    text-align: center;
+    color: rgba(4, 80, 252, 1);
+}
+
+.advan_wrap h2 {
+    font-weight: 600;
+    font-size: 48px;
+    line-height: 60px;
+    text-align: center;
+    color: rgba(24, 29, 39, 1);
+    margin: 12px 0 20px;
+}
+
+.advan_wrap h6 {
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 32px;
+    text-align: center;
+    color: rgba(83, 88, 98, 1);
+    margin-bottom: 64px;
+}
+
+.advan_grid {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    gap: 24px;
+}
+
+.adv_box {
+    padding: 32px;
+    border-radius: 16px;
+}
+
+.adv_box h4 {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    margin: 24px 0 8px;
+    color: rgba(24, 29, 39, 1);
+}
+
+.adv_box p {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(83, 88, 98, 1);
+}
+
+@media(max-width:1200px) {
+    .advan_wrap {
+        padding: 48px 22px;
+    }
+}
+
+@media(max-width:1200px) {
+    .advan_grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:650px) {
+    .advan_wrap h5 {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .advan_wrap h2 {
+        font-size: 30px;
+        line-height: 38px;
+        margin: 12px 0 16px;
+    }
+
+    .advan_wrap h6 {
+        font-size: 18px;
+        line-height: 28px;
+        margin-bottom: 48px;
+    }
+
+    .adv_box img {
+        width: 160px;
+    }
+    .adv_box h4 {
+        font-size: 20px;
+        line-height: 30px;
+    }
+
+    .adv_box p {
+        font-size: 14px;
+        line-height: 20px;
+    }
+}
+
+@media(max-width:500px) {
+    .advan_grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .advan_wrap {
+        padding: 48px 2px;
+    }
+}

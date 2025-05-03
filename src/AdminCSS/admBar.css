@@ -1,0 +1,53 @@
+.adm_bar {
+    height: calc(100vh - 80px);
+    width: 312px;
+    position: fixed;
+    left: 0;
+    top: 80px;
+    padding: 24px 17px 32px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid #044efc3e;
+    border-top: 1px solid #044efc3e;
+}
+
+.bar_top {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.bar_top a, .bar_bottom a {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: start;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+.bar_top a span, .bar_bottom a span {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(65, 70, 81, 1);
+}
+.activeBar {
+    background-color: rgba(230, 237, 255, 1);
+}
+.bar_top .activeBar span, .bar_bottom .activeBar span {
+    color: rgba(4, 78, 252, 1);
+}
+.bar_line {
+    height: 1px;
+    width: 100%;
+    background-color: rgba(233, 234, 235, 1);
+    margin: 24px 0 8px;
+}
+.adm_bar a:hover {
+    background-color: rgba(230, 237, 255, 1);
+}

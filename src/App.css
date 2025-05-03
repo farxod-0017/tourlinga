@@ -1,0 +1,113 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    background-color: #044efc08;
+}
+
+.container {
+    max-width: 1280px;
+    padding: 0 32px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Blue button */
+.btn_primary {
+    transition: all 0.2s ease-in-out;
+    /* Bootstrap blue */
+    color: white;
+    cursor: pointer;
+}
+
+/* Blue button hover and active */
+.btn_primary:hover {
+    background-color: #0056b3;
+    /* darker blue */
+}
+
+.btn_primary:active {
+    background-color: #004494;
+    /* even darker */
+    transform: scale(0.97);
+}
+
+/* Outline (light) button */
+.btn_outline {
+    transition: all 0.2s ease-in-out;
+    background-color: white;
+    color: #444;
+    border: 2px solid #444;
+    cursor: pointer;
+}
+
+/* Outline hover and active */
+.btn_outline:hover {
+    background-color: #e8e8e8;
+    color: #000;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.btn_outline:active {
+    background-color: #e2e2e2;
+    transform: scale(0.97);
+}
+
+.Loading {
+    background-color: transparent !important;
+    border: 2px solid #049906 !important;
+    color: #049906;
+    font-weight: 600;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.Loading::after {
+    content: "";
+    width: 18px;
+    height: 18px;
+    border: 3px solid black;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.4s linear infinite;
+    margin-left: 10px;
+}
+
+/* Animatsiya qoidalari */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+@media(max-width:800px) {
+    .container {
+        padding: 0 16px;
+    }
+}
+
+@media(max-width:500px) {
+    body {
+        background-color: white;
+    }
+}

@@ -1,6 +1,5 @@
 import "../Styles/hero.css"
 import bg_video from "../videos/bg-video.mp4"
-import center_video from "../videos/center-video.mp4"
 import poster from "../Images/video-thumbnail.jpg"
 
 export default function Hero() {
@@ -21,7 +20,7 @@ export default function Hero() {
 
                 <div className="video-wrapper">
                     <video controls className="main-video" poster={poster}>
-                        <source src={center_video} type="video/mp4" />
+                        <source src={"https://drive.google.com/file/d/1AzpN6DNwLILBtmNcrhWgFOdBEytIMAKn/view?usp=sharing"} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
                 </div>

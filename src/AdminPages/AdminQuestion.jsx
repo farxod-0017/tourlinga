@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer, useState } from "react"
-import "../AdminCSS/adminNews.css"
+import "../AdminCSS/admQuestions.css"
 
 import upload_icon from "../Images/upload-icon.svg"
 import close_icon from "../Images/close_icon.svg"
@@ -61,6 +61,26 @@ export default function AdminQuestions() {
     function closeModal() {
         adm_news_modal.current.classList.remove("open_news_modal");
     }
+
+    const [selected, setSelected] = useState(""); // tanlangan checkbox value
+    const [inputs, setInputs] = useState({
+        A: "",
+        B: "",
+        C: ""
+    });
+
+    const handleInputChange = (e) => {
+        setInputs({ ...inputs, [e.target.name]: e.target.value });
+    };
+
+    const handleCheckboxChange = (e) => {
+        setSelected(e.target.value);
+    };
+
+    const handleSave = () => {
+        console.log("To'g'ri javob:", selected);
+    };
+
 
     // universal blocks
     const [isLoading, setIsLoading] = useState(false);
@@ -126,8 +146,8 @@ export default function AdminQuestions() {
         // readyD.append('image', image); // bu endi real File obyekt
 
         let answer = {
-            answers:[
-                {id:3, answer:"A"}
+            answers: [
+                { id: 3, answer: "A" }
             ]
         }
         if (timeDiff < 900) {
@@ -137,7 +157,7 @@ export default function AdminQuestions() {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${takeOriginalValue('access_token')}`,
-                        "Content-Type":"application/json"
+                        "Content-Type": "application/json"
                     },
                     body: JSON.stringify(answer)
                 });
@@ -195,6 +215,7 @@ export default function AdminQuestions() {
     // create news END
 
     // get news
+    const [termTheme, setTermTheme] = useState("")
     const [direcs, setDirecs] = useState([]);
     const getDirecs = useCallback(async () => {
         const current_time = new Date();
@@ -435,6 +456,70 @@ export default function AdminQuestions() {
         }
     }
     // END delete news
+    const [org_unvs, setOrg_unvs] = useState([])
+    const getThemes = useCallback(async () => {
+        const current_time = new Date();
+        const stored_time = takeOriginalValue('stored_time');
+        const timeDiff = (current_time - new Date(stored_time)) / 60000;
+        if (timeDiff < 900) {
+            try {
+                let fetchData = await fetch(`${mURL}/main/mavzular/`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${takeOriginalValue('access_token')}`
+                    }
+                });
+                if (fetchData.ok) {
+                    let data = await fetchData.json();
+                    setOrg_unvs(data);
+                    console.log(data);
+                } else if (fetchData.status === 401) {
+                    console.log('Token tekshirilmoqda...');
+                    Cookies.remove('role');
+                    navigate('/')
+                } else {
+                    console.log('Xatolik:', fetchData.statusText);
+                }
+            } catch (error) {
+                console.log(`get Directionsda xatolik:, error`);
+            }
+        } else {
+            // Token muddati tugagan, refresh orqali yangi token olish
+            let readyPost = {
+                userId: takeOriginalValue('user_id'),
+                refreshToken: takeOriginalValue('refresh_token')
+            }
+            try {
+                let refreshResponse = await fetch(`${mURL}/auth/refresh`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': "application/json",
+                    },
+                    body: JSON.stringify(readyPost)
+                });
+                if (refreshResponse.ok) {
+                    let data = await refreshResponse.json();
+                    saveEncryptedCookie('refresh_token', data.refresh_token);
+                    saveEncryptedCookie('access_token', data.access_token);
+                    let current_time = new Date().toISOString();
+                    saveEncryptedCookie('stored_time', current_time);
+                    // Yangi token bilan so'rovni qayta amalga oshirish
+                    getDirecs();
+                } else {
+                    console.log('Refresh token yaroqsiz. Login sahifasiga yonaltirilmoqda...');
+                    Cookies.remove('role')
+                    navigate('/')
+                }
+            } catch (error) {
+                console.error('Serverga ulanishda xatolik (refresh):', error.message);
+            }
+        }
+
+    }, [navigate, saveEncryptedCookie, takeOriginalValue]);
+
+    useEffect(() => {
+        getThemes();
+    }, [ignore, getDirecs]);
     return (
         <section className="adm_news">
             {/* Modal Delete */}
@@ -451,45 +536,62 @@ export default function AdminQuestions() {
             </div>
 
             {/* Modal Post and PUT News */}
-            <div ref={adm_news_modal} className="adm_news_modal">
-                <div className="adm_modal_window">
+            <div ref={adm_news_modal} className="adm_news_modal adm_question_window">
+                <div className="adm_modal_window adm_question_modal">
                     <div className="adm_modal_head">
                         <h2>Savol yaratish</h2>
                         <img onClick={closeModal} src={close_icon} alt="" />
                     </div>
-                    <div>
-                        <h4>Savol</h4>
-                        <textarea value={direction_name} onChange={(e) => setDirectionName(e.target.value)} placeholder="Mavzu kiriting..."></textarea>
+                    <div className="quest_mavzu_tanla">
+                        <b>Mavzu tanlang</b>
+                        <select value={termTheme} onChange={(e) => setTermTheme(e.target.value)}>
+                            <option disabled value="0">Mavzuni tanlang</option>
+                            {org_unvs?.map((item) => {
+                                return (
+                                    <option key={item.id} value={item.id}>{item.name}</option>
+                                )
+                            })}
+                        </select>
+
                     </div>
-                    <div>
-                        <h4>Tavsif</h4>
-                        <textarea value={news_tavsif} onChange={(e) => setNews_tavsif(e.target.value)} className="tavsif_text" placeholder="Tavsif kiriting..."></textarea>
+                    <div className="adm_savol_inp">
+                        <h4>Savolni kiriting</h4>
+                        <textarea value={news_tavsif} onChange={(e) => setNews_tavsif(e.target.value)} className="tavsif_text" placeholder="Savol kiriting..."></textarea>
                     </div>
-                    <div>
-                        <h4>Rasm yuklang</h4>
-                        <div
-                            className="news-upload-box"
-                            onDrop={handleDrop}
-                            onDragOver={(e) => e.preventDefault()}
-                        >
-                            <label htmlFor="fileInput" className="news-upload-label">
-                                <div className="news-upload-content">
-                                    <img src={upload_icon} alt="upload" className="news-upload-icon" />
-                                    <p>Yuklash uchun bosing <span>yoki sudrab olib tashlang</span></p>
-                                    <h6>SVG, PNG, JPG yoki GIF (maks. 800x400px)</h6>
+
+                    <div className="question_adm_box">
+                        {["A", "B", "C"].map((label) => (
+                            <div className="answer_row" key={label}>
+                                <span className="label">{label}</span>
+                                <div className="asnwer_right">
+                                    <input
+                                        type="text"
+                                        name={label}
+                                        value={inputs[label]}
+                                        onChange={handleInputChange}
+                                        className="text_input"
+                                        placeholder="javob variantingizni kiriting"
+                                    />
+                                    <div >
+                                        <label className="checkbox_wrapper">
+                                            <input
+                                                type="checkbox"
+                                                name="correct"
+                                                value={label}
+                                                checked={selected === label}
+                                                onChange={handleCheckboxChange}
+                                            />
+                                            <span className="custom_checkbox"></span>
+                                        </label>
+                                        <h6>Tog‘ri javob</h6>
+                                    </div>
+
                                 </div>
-                                <input
-                                    id="fileInput"
-                                    type="file"
-                                    accept=".png,.jpg,.jpeg,.gif,.svg"
-                                    onChange={handleChange}
-                                    hidden
-                                />
-                            </label>
-                            {error && <p className="news-error-text">{error}</p>}
-                            {image && <img src={URL.createObjectURL(image)} alt="Yuklangan rasm" className="news-preview-img" />}
-                        </div>
+
+                            </div>
+                        ))}
                     </div>
+
                     <div className="adm_submit_wrap">
                         {modalMood ? (
                             <span>

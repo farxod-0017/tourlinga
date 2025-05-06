@@ -61,6 +61,13 @@ export default function AdminTermins() {
     };
     function closeModal() {
         adm_news_modal.current.classList.remove("open_news_modal");
+        setDirectionName("");
+        setNews_tavsif("");
+        setDirectionNameEng("");
+        setNews_tavsif_eng("")
+        setImage("")
+        setTermin_havola("")
+        setTermTheme("")
     }
 
     // universal blocks
@@ -268,10 +275,15 @@ export default function AdminTermins() {
     const [updingId, setUpdingId] = useState(null);
     function openUpdateModal(e, data) {
         opentModal();
-        setDirectionName(data.title);
-        setNews_tavsif(data.description);
-        setModalMood(false);
+        setDirectionName(data.uzbw);
+        setNews_tavsif(data.uzbwt);
+        setDirectionNameEng(data.engw);
+        setNews_tavsif_eng(data.engwt);
+        setTermTheme(data.mavzu_id);
+        setTermin_havola(data.link)
+
         setUpdingId(data.id);
+        setModalMood(false);
         setImage("")
         // setImage(data.image);
     };
@@ -287,14 +299,18 @@ export default function AdminTermins() {
         //     image: image
         // };
         const readyD = new FormData();
-        readyD.append('title', direction_name); // o'rniga input qiymatini qo'ying
-        readyD.append("content", news_tavsif)
-        readyD.append('image', image); // bu endi real File obyekt
+        readyD.append('uzbw', direction_name); // o'rniga input qiymatini qo'ying
+        readyD.append("uzbwt", news_tavsif)
+        readyD.append('image', image);
+        readyD.append('engwt', news_tavsif_eng)
+        readyD.append('engw', direction_name_eng)
+        readyD.append('link', termin_havola)
+        readyD.append('mavzu_id', termTheme);
 
         if (timeDiff < 900) {
             try {
                 setIsLoading(true);
-                let fetchData = await fetch(`${mURL}/news/${updingId}/`, {
+                let fetchData = await fetch(`${mURL}/main/terminlar/${updingId}/`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${takeOriginalValue('access_token')}`
@@ -374,14 +390,14 @@ export default function AdminTermins() {
         if (timeDiff < 900) {
             try {
                 setIsLoading(true);
-                let fetchData = await fetch(`${mURL}/news/${deltingId}/`, {
+                let fetchData = await fetch(`${mURL}/main/terminlar/${deltingId}/`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${takeOriginalValue('access_token')}`
                     },
                 });
-                //   const result = await fetchData.json();
-                //   console.log(result);
+                const result = await fetchData.json();
+                console.log(result);
                 fourceUpdate();
 
                 //   if (fetchData.ok) {
@@ -507,7 +523,7 @@ export default function AdminTermins() {
     return (
         <section className="adm_news">
             {/* Modal Delete */}
-            <div ref={del_modal} className="adm_news_modal">
+            <div ref={del_modal} className="adm_news_modal adm_del_modal">
                 <div className="adm_del_modal_window">
                     <img src={undov} alt="" />
                     <h4>Terminni o'chirish</h4>
@@ -520,8 +536,8 @@ export default function AdminTermins() {
             </div>
 
             {/* Modal Post and PUT News */}
-            <div ref={adm_news_modal} className="adm_news_modal">
-                <div className="adm_modal_window adm_termin_modal">
+            <div ref={adm_news_modal} className="adm_news_modal adm_termin_modal">
+                <div className="adm_modal_window">
                     <div className="adm_modal_head">
                         <h2>Termin yaratish</h2>
                         <img onClick={closeModal} src={close_icon} alt="" />
@@ -556,11 +572,12 @@ export default function AdminTermins() {
                         <span>
                             <b>Mavzu tanlang</b>
                             <select value={termTheme} onChange={(e) => setTermTheme(e.target.value)}>
-                                {org_unvs?.map((item)=> {
+                                {org_unvs?.map((item) => {
                                     return (
-                                        <option value={item.id}>{item.name}</option>
+                                        <option key={item.id} value={item.id}>{item.name}</option>
                                     )
                                 })}
+
                             </select>
                         </span>
 
@@ -660,20 +677,21 @@ export default function AdminTermins() {
                         </tr>
                     </thead>
                     <tbody>
-                        {direcs?.slice()?.reverse()?.map((item, index) => (
+                    {/* direcs?.slice()?.reverse()?.map */}
+                        {direcs?.map((item, index) => (
                             <tr key={item.id}>
-                                <td>{direcs?.length - index}</td>
+                                <td>{index+1}</td>
                                 <td>{item.uzbw}/{item.engw}</td>
                                 <td className="admin-td-description">{item.uzbwt} <br /> {item.engwt}</td>
                                 <td>
                                     <img src={item.image} alt="rasm" className="row-image" />
                                 </td>
-                                <td>{org_unvs?.find((t)=> t.id === +item.mavzu_id)?.name}</td>
+                                <td>{org_unvs?.find((t) => t.id === +item.mavzu_id)?.name}</td>
                                 <td>
                                     <div className="action-buttons">
                                         {/* <button className="btn view-btn">👁️</button> */}
-                                        <button onClick={(e) => openUpdateModal(e, { id: item.id, title: item.title, description: item.content, image: item.image })} className="btn edit-btn"><img src={edit} alt="" /></button>
-                                        <button onClick={(e) => openDeleteModal(e, item.id, item.title)} className="btn delete-btn"><img src={del} alt="" /></button>
+                                        <button onClick={(e) => openUpdateModal(e, { id: item.id, uzbw: item.uzbw, uzbwt: item.uzbwt, engw: item.engw, engwt: item.engwt, mavzu_id: item.mavzu_id, link: item.link })} className="btn edit-btn"><img src={edit} alt="" /></button>
+                                        <button onClick={(e) => openDeleteModal(e, item.id, item.uzbw)} className="btn delete-btn"><img src={del} alt="" /></button>
                                     </div>
                                 </td>
                             </tr>

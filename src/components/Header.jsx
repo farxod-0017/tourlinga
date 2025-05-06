@@ -82,9 +82,9 @@ export default function Header() {
                     </div>
                     <div className="head_right">
                         <select>
-                            <option value="1">(UZ)</option>
-                            <option value="2">(RU)</option>
-                            <option value="3">(ENG)</option>
+                            <option value="1">UZ</option>
+                            <option value="2">RU</option>
+                            <option value="3">ENG</option>
                         </select>
                         {isLogin ? (
                             <div className="head_account head_unv">

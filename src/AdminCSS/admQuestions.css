@@ -1,0 +1,156 @@
+.question_adm_box {
+    width: 100%;
+    padding: 24px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    font-family: sans-serif;
+    flex-direction: column;
+}
+.adm_question_window {
+    align-items: start;
+}
+
+.question_adm_box .answer_row {
+    display: flex;
+    align-items: start;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.question_adm_box .label {
+    width: 20px;
+    font-weight: 600;
+    font-size: 27.36px;
+    line-height: 34.66px;
+    color: rgba(24, 29, 39, 1);
+}
+
+.question_adm_box .text_input {
+    flex-grow: 1;
+    background-color: rgba(250, 250, 250, 1);
+    border: 0.91px solid rgba(213, 215, 218, 1);
+    box-shadow: 0px 0.91px 1.82px 0px rgba(10, 13, 18, 0.05);
+    border-radius: 7.3px;
+    padding: 9px 13px;
+    font-weight: 400;
+    font-size: 14.59px;
+    line-height: 21.89px;
+    color: rgba(113, 118, 128, 1);
+}
+
+.question_adm_box .checkbox_wrapper {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+}
+
+.question_adm_box .checkbox_wrapper input[type="checkbox"] {
+    opacity: 0;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.question_adm_box .custom_checkbox {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    background: white;
+    display: inline-block;
+    transition: 0.2s;
+    width: 36px;
+    height: 20px;
+    border-radius: 12px;
+    padding: 2px;
+    border: none;
+    background-color: rgba(233, 234, 235, 1);
+}
+
+.question_adm_box .checkbox_wrapper input[type="checkbox"]:checked+.custom_checkbox {
+    position: relative;
+    background-color: rgba(65, 188, 92, 1);
+
+}
+
+.question_adm_box .checkbox_wrapper input[type="checkbox"]+.custom_checkbox::after {
+    content: "";
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0px 1px 3px 0px rgba(10, 13, 18, 0.1);
+    position: absolute;
+    top: 2px;
+    left: 2px;
+}
+
+.question_adm_box .checkbox_wrapper input[type="checkbox"]:checked+.custom_checkbox::after {
+    transform: translateX(16px);
+    transition: 100ms;
+}
+
+.question_adm_box .save_btn {
+    margin-top: 24px;
+    padding: 10px 24px;
+    font-size: 16px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+
+.adm_question_modal {
+    max-width: 1064px;
+    width: 100%;
+}
+
+.adm_question_modal .adm_savol_inp {
+    flex-direction: column;
+    gap: 22px;
+}
+
+.adm_question_modal .adm_savol_inp textarea {
+    width: 100%;
+    border: 1px solid rgba(4, 78, 252, 1);
+    box-shadow: 0px 1px 2px 0px rgba(10, 13, 18, 0.05);
+}
+
+.adm_question_modal .asnwer_right {
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+}
+
+.adm_question_modal .asnwer_right div {
+    justify-content: start;
+    gap: 22px;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.adm_question_modal .asnwer_right div h6 {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(65, 70, 81, 1);
+}
+.adm_question_modal .quest_mavzu_tanla {
+    display: grid;
+    grid-template-columns: 20% 65%;
+}
+.adm_question_modal .quest_mavzu_tanla select option {
+    width: 100px !important;
+}
+.adm_question_modal .quest_mavzu_tanla select {
+    border: 1px solid rgba(213, 215, 218, 1);
+    box-shadow: 0px 1px 2px 0px rgba(10, 13, 18, 0.05);
+    padding: 10px 16px;
+    border-radius: 8px;
+}

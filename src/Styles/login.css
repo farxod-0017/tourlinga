@@ -3,7 +3,7 @@
     align-items: center;
     justify-content: center;
     min-height: calc(100vh - 80px);
-    padding: 40px 0;
+    padding: 140px 0 40px;
 }
 
 .login_box {

@@ -47,6 +47,7 @@
     backdrop-filter: blur(10px);
     display: flex;
     justify-content: center;
+    align-items: center;
     overflow-y: scroll;
     transform: translateX(3000px);
     opacity: 0;
@@ -69,6 +70,7 @@
     background-color: white;
     width: 70vw;
     height: fit-content;
+    max-width: 930px;
 }
 
 .adm_modal_window h2 {

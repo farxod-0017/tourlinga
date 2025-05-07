@@ -4,7 +4,6 @@ import "../AdminCSS/admBar.css"
 import acc_icon from "../Images/account-icon.png"
 import log_out_icon from "../Images/log_out_icon.svg"
 
-
 export default function AdminBar() {
 
     let location = useLocation();
@@ -28,7 +27,6 @@ export default function AdminBar() {
                             strokeLinejoin="round"
                         />
                     </svg>
-
                     <span>Dashboard</span>
                 </Link>
                 <Link to={"universities"} className={`${path === "/admin/universities" ? "activeBar" : ""}`}>

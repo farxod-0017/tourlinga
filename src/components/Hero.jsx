@@ -20,7 +20,7 @@ export default function Hero() {
 
                 <div className="video-wrapper">
                     <video controls className="main-video" poster={poster}>
-                        <source src={"https://drive.google.com/file/d/1AzpN6DNwLILBtmNcrhWgFOdBEytIMAKn/view?usp=sharing"} type="video/mp4" />
+                        <source src="https://files.catbox.moe/ciyf68.mp4" type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
                 </div>

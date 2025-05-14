@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useReducer, useState } from "react"
 import "../AdminCSS/admQuestions.css"
 
-import upload_icon from "../Images/upload-icon.svg"
 import close_icon from "../Images/close_icon.svg"
 import undov from "../Images/undov.svg"
 import edit from "../Images/edit.svg"
@@ -17,42 +16,7 @@ import { toast, ToastContainer } from 'react-toastify';
 export default function AdminQuestions() {
     const [modalMood, setModalMood] = useState(true);
 
-    const [image, setImage] = useState(null);
     const [error, setError] = useState('');
-
-    const handleDrop = (e) => {
-        e.preventDefault();
-        const file = e.dataTransfer.files[0];
-        validateAndSet(file);
-    };
-
-    const handleChange = (e) => {
-        const file = e.target.files[0];
-        validateAndSet(file);
-    };
-
-    const validateAndSet = (file) => {
-        if (!file) return;
-        const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/svg+xml'];
-        const img = new Image();
-        const objectURL = URL.createObjectURL(file);
-        img.src = objectURL;
-
-        img.onload = () => {
-            if (
-                allowedTypes.includes(file.type) &&
-                img.width <= 8000 &&
-                img.height <= 4000
-            ) {
-                setImage(file); // faqat file saqlanadi
-                setError('');
-            } else {
-                setError('Faqat 800x400px dan kichik SVG, PNG, JPG, JPEG yoki GIF fayllar qabul qilinadi.');
-                setImage(null);
-            }
-        };
-    };
-
 
     let adm_news_modal = useRef("")
     function opentModal() {
@@ -79,6 +43,7 @@ export default function AdminQuestions() {
 
     const handleSave = () => {
         console.log("To'g'ri javob:", selected);
+        console.log(inputs);      
     };
 
 
@@ -118,25 +83,28 @@ export default function AdminQuestions() {
 
     // create news
     const [direction_name, setDirectionName] = useState("");
-    const [news_tavsif, setNews_tavsif] = useState("");
     function openCreateModal() {
         opentModal();
         setModalMood(true);
         setDirectionName("");
-        setNews_tavsif("");
-        setImage("")
+        setTermTheme(org_unvs ? org_unvs[0]?.id : "");
+        setSelected("");
+        setInputs({...inputs, A:"", B:"", C:""})
     }
     async function createDirection(e) {
         e.preventDefault();
         const stored_time = takeOriginalValue('stored_time');
         const currentTime = new Date();
         const timeDiff = (currentTime - new Date(stored_time)) / 60000;
-        // let readyD = {
-        //     title: direction_name,
-        //     content: news_tavsif,
-        //     image: image
-        // };
-        const readyD = new FormData();
+        let readyD = {
+            title: direction_name,
+            A:inputs.A,
+            B:inputs.B,
+            C:inputs.C,
+            true_answer:selected,
+            mavzu_id:termTheme
+        };
+        // const readyD = new FormData();
         // readyD.append('title', direction_name); // o'rniga input qiymatini qo'ying
         // readyD.append("A", news_tavsif)
         // readyD.append("B", news_tavsif)
@@ -145,21 +113,21 @@ export default function AdminQuestions() {
         // readyD.append('mavzu_id', "2")
         // readyD.append('image', image); // bu endi real File obyekt
 
-        let answer = {
-            answers: [
-                { id: 3, answer: "A" }
-            ]
-        }
+        // let answer = {
+        //     answers: [
+        //         { id: 3, answer: "A" }
+        //     ]
+        // }
         if (timeDiff < 900) {
             try {
                 setIsLoading(true);
-                let fetchData = await fetch(`${mURL}/main/check-answers/`, {
+                let fetchData = await fetch(`${mURL}/main/savollar/`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${takeOriginalValue('access_token')}`,
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify(answer)
+                    body: JSON.stringify(readyD)
                 });
                 if (fetchData.ok) {
                     const result = await fetchData.json();
@@ -286,11 +254,12 @@ export default function AdminQuestions() {
     const [updingId, setUpdingId] = useState(null);
     function openUpdateModal(e, data) {
         opentModal();
-        setDirectionName(data.title);
-        setNews_tavsif(data.description);
         setModalMood(false);
         setUpdingId(data.id);
-        setImage("")
+        setDirectionName(data.title);
+        setTermTheme(data.mavzu_id);
+        setSelected(data.true_answer);
+        setInputs({...inputs, A:data.A, B:data.B, C:data.C})
         // setImage(data.image);
     };
 
@@ -299,25 +268,29 @@ export default function AdminQuestions() {
         const stored_time = takeOriginalValue('stored_time');
         const currentTime = new Date();
         const timeDiff = (currentTime - new Date(stored_time)) / 60000;
-        // let readyD = {
-        //     title: direction_name,
-        //     content: news_tavsif,
-        //     image: image
-        // };
-        const readyD = new FormData();
-        readyD.append('title', direction_name); // o'rniga input qiymatini qo'ying
-        readyD.append("content", news_tavsif)
-        readyD.append('image', image); // bu endi real File obyekt
+        let readyD = {
+            title: direction_name,
+            A:inputs.A,
+            B:inputs.B,
+            C:inputs.C,
+            true_answer:selected,
+            mavzu_id:termTheme,
+        };
+        // const readyD = new FormData();
+        // readyD.append('title', direction_name);
+        // readyD.append("content", news_tavsif)
+        // readyD.append('image', image); 
 
         if (timeDiff < 900) {
             try {
                 setIsLoading(true);
-                let fetchData = await fetch(`${mURL}/news/${updingId}/`, {
+                let fetchData = await fetch(`${mURL}/main/savollar/${updingId}/`, {
                     method: 'PUT',
                     headers: {
-                        'Authorization': `Bearer ${takeOriginalValue('access_token')}`
+                        'Authorization': `Bearer ${takeOriginalValue('access_token')}`,
+                        'Content-Type':"application/json"
                     },
-                    body: readyD
+                    body: JSON.stringify(readyD)
                 });
                 if (fetchData.ok) {
                     const result = await fetchData.json();
@@ -392,7 +365,7 @@ export default function AdminQuestions() {
         if (timeDiff < 900) {
             try {
                 setIsLoading(true);
-                let fetchData = await fetch(`${mURL}/news/${deltingId}/`, {
+                let fetchData = await fetch(`${mURL}/main/savollar/${deltingId}/`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${takeOriginalValue('access_token')}`
@@ -556,7 +529,7 @@ export default function AdminQuestions() {
                     </div>
                     <div className="adm_savol_inp">
                         <h4>Savolni kiriting</h4>
-                        <textarea value={news_tavsif} onChange={(e) => setNews_tavsif(e.target.value)} className="tavsif_text" placeholder="Savol kiriting..."></textarea>
+                        <textarea value={direction_name} onChange={(e) => setDirectionName(e.target.value)} className="tavsif_text" placeholder="Savol kiriting..."></textarea>
                     </div>
 
                     <div className="question_adm_box">
@@ -654,26 +627,29 @@ export default function AdminQuestions() {
                         <tr>
                             <th>T/R</th>
                             <th>Savol</th>
-                            <th>Tavsif</th>
-                            <th>Rasmi</th>
-                            <th>Post qilingan vaqti</th>
+                            <th>Mavzusi</th>
+                            <th>Varian A</th>
+                            <th>Varian B</th>
+                            <th>Varian C</th>
                             <th>Sozlamalar</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {direcs?.slice()?.reverse()?.map((item, index) => (
+                    {/* .slice()?.reverse()? */}
+                        {direcs?.map((item, index) => (
                             <tr key={item.id}>
-                                <td>{direcs?.length - index}</td>
+                                <td>{index+1}</td>
                                 <td>{item.title}</td>
-                                <td className="admin-td-description">{item.content}</td>
-                                <td>
-                                    <img src={item.image} alt="rasm" className="row-image" />
+                                <td className="admin-td-description">{org_unvs?.find(e=> e.id === +item.mavzu_id)?.name}</td>
+                                <td className={item.true_answer === "A" ? "adm_true_answer" :""}>
+                                    {item.A}
                                 </td>
-                                <td>{formatDate(item.created_at)}</td>
+                                <td className={item.true_answer === "B" ? "adm_true_answer" :""}>{item.B}</td>
+                                <td className={item.true_answer === "C" ? "adm_true_answer" :""}>{item.C}</td>
                                 <td>
                                     <div className="action-buttons">
                                         {/* <button className="btn view-btn">👁️</button> */}
-                                        <button onClick={(e) => openUpdateModal(e, { id: item.id, title: item.title, description: item.content, image: item.image })} className="btn edit-btn"><img src={edit} alt="" /></button>
+                                        <button onClick={(e) => openUpdateModal(e, { id: item.id, title: item.title, true_answer: item.true_answer, A:item.A, B:item.B, C:item.C, mavzu_id:item.mavzu_id })} className="btn edit-btn"><img src={edit} alt="" /></button>
                                         <button onClick={(e) => openDeleteModal(e, item.id, item.title)} className="btn delete-btn"><img src={del} alt="" /></button>
                                     </div>
                                 </td>

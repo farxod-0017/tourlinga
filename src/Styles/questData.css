@@ -1,0 +1,104 @@
+.quest_box {
+    border: 1px solid rgba(233, 234, 235, 1);
+    border-radius: 16px;
+    padding: 24px 20px;
+    margin-bottom: 32px;
+}
+
+.quest_box h4 {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    color: rgba(24, 29, 39, 1);
+}
+
+.quest_box h5 {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    color: rgba(83, 88, 98, 1);
+    margin: 24px 0 24px;
+}
+
+.quest_box label {
+    background: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(233, 234, 235, 1);
+    border-radius: 8px;
+    padding: 16px 64px 16px 16px;
+    position: relative;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.quest_box label:hover {
+    border: 1px solid rgba(4, 78, 252, 1);
+}
+
+.quest_box label:hover .clone_inp_radio {
+    border: 0.8px solid rgba(4, 78, 252, 1);
+}
+
+.quest_box input {
+    display: none;
+}
+
+.quest_box span {
+    width: 16px;
+    height: 16px;
+    border-radius: 4.8px;
+    border: 0.8px solid rgba(213, 215, 218, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 16px;
+}
+
+.quest_box span img {
+    display: none;
+}
+
+.quest_box label input[type="radio"]:checked+.clone_inp_radio {
+    border: 0.8px solid rgba(4, 78, 252, 1)
+}
+
+.quest_box label input[type="radio"]:checked+.clone_inp_radio img {
+    display: block;
+}
+
+.quest_box .selected_anw {
+    border: 1px solid rgba(4, 78, 252, 1);
+    background-color: rgba(230, 237, 255, 1);
+}
+
+.finish_quest {
+    background: rgba(4, 78, 252, 1);
+    border: 1px solid rgba(4, 78, 252, 1);
+    box-shadow: 0px 1px 2px 0px rgba(10, 13, 18, 0.05);
+    border-radius: 8px;
+    font-family: Inter;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0%;
+    color: rgba(255, 255, 255, 1);
+    padding: 10px 16px;
+    margin: 16px 0 16px auto;
+    display: block;
+    cursor: pointer;
+}
+.quest_grid hr {
+    opacity: 0.7;
+}
+#finish_btn_disabled {
+    opacity: 0.6;
+}
+
+#yopish_btn_resul {
+    width: 100%;
+    background: rgba(4, 78, 252, 1);
+    border: 1px solid rgba(4, 78, 252, 1);
+    box-shadow: 0px 1px 2px 0px rgba(10, 13, 18, 0.05);
+    color: white;
+}

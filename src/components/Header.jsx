@@ -33,8 +33,8 @@ export default function Header() {
                     <Link to="!#">Bosh sahifa</Link>
                     <Link to="!#">Biz haqimizda</Link>
                     <Link to="!#">Statistika</Link>
-                    <Link to="!#">Terminlar</Link>
-                    <Link to="!#">Savol-javob</Link>
+                    <Link to="/terms">Terminlar</Link>
+                    <Link to="/questions">Savol-javob</Link>
                 </nav>
                 <div className="mob_footer">
                     <hr />
@@ -62,7 +62,7 @@ export default function Header() {
                         </div>
                     ) : (
                         <div className="mob_login">
-                            <Link><button type="button" className='btn_primary'>Ro‘yxatdan o‘tish</button></Link>
+                            <Link to={"/sign-up"}><button type="button" className='btn_primary'>Ro‘yxatdan o‘tish</button></Link>
                             <Link to={'/login'}><button type="button" className='mob_secont_btn btn_outline'>Tizimga kirish</button></Link>
                         </div>
                     )}
@@ -76,7 +76,7 @@ export default function Header() {
                             <Link to={"/"}>Bosh sahifa</Link>
                             <Link to={"/statistics"}>Statistika</Link>
                             <Link to={"/terms"}>Terminlar</Link>
-                            <Link to={"/question-answer"}>Savol-javob</Link>
+                            <Link to={"/questions"}>Savol-javob</Link>
                             <Link to={"/contact"}>Aloqa</Link>
                         </nav>
                     </div>

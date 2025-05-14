@@ -74,7 +74,7 @@
     border-radius: 8px;
 }
 
-.sign_box1 input[type="number"] {
+.sign_box1 input[type="text"], .sign_box1 input[type="number"] {
     width: 100%;
     display: block;
     align-items: center;

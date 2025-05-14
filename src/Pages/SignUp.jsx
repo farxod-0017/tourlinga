@@ -150,7 +150,7 @@ return (
                     </span>
                 </div>
                 <h4>Telefon raqam</h4>
-                <input ref={phone} required placeholder="Telefon raqamingizni kiriting" type="number" />
+                <input ref={phone} required placeholder="Telefon raqamingizni kiriting" type="text" defaultValue={"+998"} />
                 <button onClick={(e) => paramSignBox(2)} className="btn_primary" type="button">Davom etish</button>
                 <h3>Akkauntingiz bormi? <Link to={"/login"}>Tizimga kiring</Link></h3>
             </div>

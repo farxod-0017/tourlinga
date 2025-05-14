@@ -5,6 +5,7 @@
     z-index: 100;
     width: 100%;
     backdrop-filter: blur(16px);
+    top: 0;
 }
 
 .header_fixed {

@@ -1,0 +1,217 @@
+.terms {
+    min-height: 100vh;
+    padding: 96px 46px 56px 397px;
+}
+
+.theme_bar {
+    position: fixed;
+    width: 397px;
+    top: 106px;
+    left: 0;
+    padding: 0 32px 64px 112px;
+    background-color: rgba(255, 255, 255, 0.7);
+    /* yarim shaffof oq rang */
+    height: calc(100vh - 106px);
+    backdrop-filter: blur(16px);
+    overflow-y: scroll;
+}
+
+.theme_head {
+    margin-bottom: 34px;
+}
+
+.theme_head ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    align-items: center;
+    margin-bottom: 12px;
+    min-height: 57px;
+}
+
+.theme_head ul li {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    vertical-align: middle;
+    color: rgba(113, 118, 128, 1);
+}
+
+.theme_head ul li:nth-last-of-type(1) {
+    color: rgba(4, 78, 252, 1);
+}
+
+.theme_head h1 {
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 44px;
+    color: rgba(24, 29, 39, 1);
+}
+
+.theme_body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.theme_body input {
+    width: 100%;
+    height: 44px;
+    border-radius: 8px;
+    padding: 10px 14px;
+    border: 1px solid rgba(213, 215, 218, 1);
+    box-shadow: 0px 1px 2px 0px rgba(10, 13, 18, 0.05);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(113, 118, 128, 1);
+}
+
+.theme_body ul {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.theme_body ul li {
+    width: 100%;
+    height: 40px;
+    padding: 8px 12px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(65, 70, 81, 1);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.theme_body .selectedTheme {
+    background: rgba(230, 237, 255, 1);
+    color: rgba(4, 78, 252, 1);
+    transition: 200ms ease-in-out;
+}
+
+.terms_body {
+    margin: 147px auto 0;
+    padding: 2px 16px;
+    max-width: 932px;
+    width: 100%;
+}
+
+.terms_body h2 {
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 125%;
+    color: rgba(24, 29, 39, 1);
+    margin-bottom: 24px;
+}
+
+.terms_body_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgb(218, 216, 216);
+    padding: 0 4px 16px;
+}
+
+.terms_body_head nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.terms_body_head nav a {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(113, 118, 128, 1);
+}
+
+.terms_body_head nav .active {
+    color: rgba(4, 78, 252, 1);
+    position: relative;
+}
+
+.terms_body_head nav .active::after {
+    content: "";
+    width: 100%;
+    height: 2px;
+    background-color: rgba(4, 78, 252, 1);
+    display: block;
+    position: absolute;
+    top: 35px;
+}
+
+.terms_body_head h4 {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: right;
+    color: rgba(0, 8, 25, 1);
+}
+
+.terms_body_head h4 span {
+    color: rgba(4, 78, 252, 1);
+}
+
+.terms_grid {
+    padding: 32px 0;
+}
+
+.terms_wrap {
+    display: flex;
+    gap: 16px;
+    border-bottom: 1px solid rgba(233, 234, 235, 1);
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    /* align-items: start; */
+}
+
+.terms_box {
+    max-width: 441px;
+    background-color: rgba(245, 245, 245, 1);
+    border-radius: 16px;
+    border: none;
+    padding: 24px 20px;
+}
+
+.terms_box h5 {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: start;
+    vertical-align: middle;
+    color: rgba(4, 78, 252, 1);
+}
+
+.terms_box h3 {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    color: rgba(24, 29, 39, 1);
+    margin: 12px 0 16px;
+}
+
+.terms_box p {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    color: rgba(83, 88, 98, 1);
+}
+
+.terms_box a {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    color: rgba(4, 78, 252, 1);
+    margin: 16px 0;
+    display: block;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.terms_box img {
+    width: 100%;
+}

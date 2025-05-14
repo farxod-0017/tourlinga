@@ -19,6 +19,8 @@ import AdminFaculty from './AdminPages/AdminFaculty.jsx'
 import AdminThemes from './AdminPages/AdminTheme.jsx'
 import AdminTermins from './AdminPages/AdminTermins.jsx'
 import AdminQuestions from './AdminPages/AdminQuestion.jsx'
+import TermData from './Pages/TermData.jsx'
+import QuestData from './Pages/QuestData.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -27,6 +29,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path='/' element={<App />}>
           <Route path='/' element={<HomePage/>}/>
           <Route path='/contact' element={<AboutPage/>}/>
+          <Route path='/terms' element={<TermData/>}/>
+          <Route path='/questions' element={<QuestData/>} />
           <Route path='/login' element={<Login/>}/>
           <Route path='/sign-up' element={<SignUp/>}/>
           <Route path='/profile'/>

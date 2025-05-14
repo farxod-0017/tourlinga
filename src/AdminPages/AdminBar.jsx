@@ -11,7 +11,7 @@ export default function AdminBar() {
     return (
         <div className="adm_bar">
             <div className="bar_top">
-                <Link>
+                <Link to={"/admin"} className={`${path === "/admin" ? "activeBar" : ""}`}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -21,7 +21,7 @@ export default function AdminBar() {
                     >
                         <path
                             d="M18 20V10M12 20V4M6 20V14"
-                            stroke="#717680"
+                            stroke={path === "/admin" ? "#044EFC" : "rgba(113, 118, 128, 1)"}
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeLinejoin="round"

@@ -1,10 +1,13 @@
-
+import '../AdminCSS/admHome.css'
 import { useCallback, useEffect, useReducer, useState } from "react"
 
 import { mURL } from "../mURL"
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
+
+import arrow_up from '../Images/arrow-up.svg'
+import arrow_down from "../Images/arrow-down.svg"
 
 
 export default function AdminHome() {
@@ -97,7 +100,7 @@ export default function AdminHome() {
 
     useEffect(() => {
         getDirecs();
-    }, [ getDirecs]);
+    }, [getDirecs]);
 
     // END get news
 
@@ -106,7 +109,63 @@ export default function AdminHome() {
             <h1>Dashboard</h1>
             <h3>Barcha ma’lumotlar bitta sahifada.</h3>
             <div className="stat_grid">
+                <div className="stat_box">
+                    <h4>mavzular soni</h4>
+                    <h2>1250</h2>
+                    <div>
+                        <img src={arrow_up} alt="" />
+                        <h5>
+                            <span>10%</span>
+                            vs last month
+                        </h5>
+                    </div>
+                </div>
 
+
+                <div className="stat_box">
+                    <h4>mavzular soni</h4>
+                    <h2>1250</h2>
+                    <div>
+                        <img src={arrow_up} alt="" />
+                        <h5>
+                            <span>10%</span>
+                            vs last month
+                        </h5>
+                    </div>
+                </div>
+                <div className="stat_box">
+                    <h4>mavzular soni</h4>
+                    <h2>1250</h2>
+                    <div>
+                        <img src={arrow_up} alt="" />
+                        <h5>
+                            <span>10%</span>
+                            vs last month
+                        </h5>
+                    </div>
+                </div>
+                <div className="stat_box">
+                    <h4>mavzular soni</h4>
+                    <h2>1250</h2>
+                    <div>
+                        <img src={arrow_up} alt="" />
+                        <h5>
+                            <span>10%</span>
+                            vs last month
+                        </h5>
+                    </div>
+                </div>
+                <div className="stat_box">
+                    <h4>mavzular soni</h4>
+                    <h2>1250</h2>
+                    <div>
+                        <img src={arrow_up} alt="" />
+                        <h5>
+                            <span>10%</span>
+                            vs last month
+                        </h5>
+                    </div>
+                </div>
             </div>
         </div>
     )

@@ -1,0 +1,49 @@
+.adm_home {
+    padding: 32px;
+    min-height: 100vh;
+}
+
+.adm_home h1 {
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 38px;
+    color: rgba(24, 29, 39, 1);
+    margin-bottom: 4px;
+}
+
+.adm_home h3 {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(83, 88, 98, 1);
+    margin-bottom: 32px;
+}
+
+.stat_grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.stat_box {
+    border: 1px solid rgba(233, 234, 235, 1);
+    box-shadow: 0px 1px 2px 0px rgba(10, 13, 18, 0.05);
+    border-radius: 8px;
+    min-width: 338px;
+    padding: 24px;
+
+}
+
+.stat_box h4 {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(24, 29, 39, 1);
+}
+
+.stat_box h2 {
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 44px;
+    margin: 24px 0 16px;
+}

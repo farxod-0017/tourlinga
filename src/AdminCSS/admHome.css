@@ -1,6 +1,6 @@
 .adm_home {
     padding: 32px;
-    min-height: 100vh;
+    min-height: calc(100vh - 70px);
 }
 
 .adm_home h1 {
@@ -46,4 +46,20 @@
     font-size: 36px;
     line-height: 44px;
     margin: 24px 0 16px;
+}
+
+.stat_box div {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.stat_box div h5 {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(83, 88, 98, 1);
+}
+.stat_box div h5 span {
+    color: rgba(2, 122, 72, 1);
 }

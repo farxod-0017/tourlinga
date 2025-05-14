@@ -9,10 +9,10 @@
     top: 106px;
     left: 0;
     padding: 0 32px 64px 112px;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 1);
     /* yarim shaffof oq rang */
     height: calc(100vh - 106px);
-    backdrop-filter: blur(16px);
+    /* backdrop-filter: blur(16px); */
     overflow-y: scroll;
 }
 

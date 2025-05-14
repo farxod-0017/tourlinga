@@ -34,8 +34,7 @@ export default function AdminHome() {
 
     // get Themes
     // Fake NEWS Array
-    const [org_unvs, setOrg_unvs] = useState([])
-    const [direcs, setDirecs] = useState([]);
+    const [direcs, setDirecs] = useState({});
     const getDirecs = useCallback(async () => {
         const current_time = new Date();
         const stored_time = takeOriginalValue('stored_time');
@@ -50,9 +49,7 @@ export default function AdminHome() {
                 });
                 if (fetchData.ok) {
                     let data = await fetchData.json();
-                    let data_visible = data?.map((item) => ({ ...item, visible: false }))
-                    setDirecs(data_visible);
-                    setOrg_unvs(data_visible);
+                    setDirecs(data);
                     console.log(data);
                 } else if (fetchData.status === 401) {
                     console.log('Token tekshirilmoqda...');
@@ -62,7 +59,7 @@ export default function AdminHome() {
                     console.log('Xatolik:', fetchData.statusText);
                 }
             } catch (error) {
-                console.log(`get Directionsda xatolik:, error`);
+                console.log(`get Directionsda xatolik:, ${error}`);
             }
         } else {
             // Token muddati tugagan, refresh orqali yangi token olish
@@ -109,63 +106,19 @@ export default function AdminHome() {
             <h1>Dashboard</h1>
             <h3>Barcha ma’lumotlar bitta sahifada.</h3>
             <div className="stat_grid">
-                <div className="stat_box">
-                    <h4>mavzular soni</h4>
-                    <h2>1250</h2>
-                    <div>
-                        <img src={arrow_up} alt="" />
-                        <h5>
-                            <span>10%</span>
-                            vs last month
-                        </h5>
+                {Object.entries(direcs).map(([key, value]) => (
+                    <div key={key} className='stat_box'>
+                        <h4>{key === "mavzu" ? "Mavzular soni" : key === "savol" ? "Savollar soni" : key === "termin" ? "Terminlar soni" : key === "talabalar" ? "Talabalar soni" : key==="universitetlar" ? "Universitetlar soni": key === "talabalar_ball" ? "To‘plangan ballar" : "Ko'rsatkich"}</h4>
+                        <h2>{value.current}</h2>
+                        <div>
+                            <img src={arrow_up} alt="" />
+                            <h5>
+                                <span>{value.percent_change}%</span>
+                                vs last month
+                            </h5>
+                        </div>
                     </div>
-                </div>
-
-
-                <div className="stat_box">
-                    <h4>mavzular soni</h4>
-                    <h2>1250</h2>
-                    <div>
-                        <img src={arrow_up} alt="" />
-                        <h5>
-                            <span>10%</span>
-                            vs last month
-                        </h5>
-                    </div>
-                </div>
-                <div className="stat_box">
-                    <h4>mavzular soni</h4>
-                    <h2>1250</h2>
-                    <div>
-                        <img src={arrow_up} alt="" />
-                        <h5>
-                            <span>10%</span>
-                            vs last month
-                        </h5>
-                    </div>
-                </div>
-                <div className="stat_box">
-                    <h4>mavzular soni</h4>
-                    <h2>1250</h2>
-                    <div>
-                        <img src={arrow_up} alt="" />
-                        <h5>
-                            <span>10%</span>
-                            vs last month
-                        </h5>
-                    </div>
-                </div>
-                <div className="stat_box">
-                    <h4>mavzular soni</h4>
-                    <h2>1250</h2>
-                    <div>
-                        <img src={arrow_up} alt="" />
-                        <h5>
-                            <span>10%</span>
-                            vs last month
-                        </h5>
-                    </div>
-                </div>
+                ))}
             </div>
         </div>
     )

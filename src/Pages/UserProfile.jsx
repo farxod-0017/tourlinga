@@ -1,5 +1,4 @@
-import '../AdminCSS/admProfile.css'
-
+import '../Styles/userPrf.css'
 import { useCallback, useEffect, useReducer, useState } from "react"
 
 import { useRef } from "react";
@@ -12,7 +11,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import upload_icon from "../Images/upload-icon.svg"
 
 
-export default function AdminProfile() {
+export default function UserProfile() {
     const [image, setImage] = useState(null);
     const [error, setError] = useState('');
 
@@ -70,9 +69,45 @@ export default function AdminProfile() {
 
     // END universal blocks
 
+    // get unv and faculty
+    const [unvs, setUnvs] = useState([]);
+    const getUnvs = async () => {
+        try {
+            let fetchData = await fetch(`${mURL}/universities/universities/`, {
+                method: 'GET',
+            });
+            let data = await fetchData.json();
+            setUnvs(data)
+            console.log(data);
+        } catch (error) {
+            console.log(`get Directionsda xatolik:, error`);
+        }
+    };
+    const [faculs, setFaculs] = useState([])
+    const getFaculty = async () => {
+        try {
+            let fetchData = await fetch(`${mURL}/universities/faculties/`, {
+                method: 'GET',
+            });
+            let data = await fetchData.json();
+            setFaculs(data)
+            console.log(data);
+        } catch (error) {
+            console.log(`get Directionsda xatolik:, error`);
+        }
+    };
+    useEffect(() => {
+        getUnvs()
+        getFaculty();
+    }, [])
+    // END get unv and faculty
+
     const [direction_name, setDirectionName] = useState("");
     const [news_tavsif, setNews_tavsif] = useState("");
     const [email, setEmail] = useState("");
+    const [unv, setUnv] = useState("");
+    const [facul, setFacul] = useState("");
+    const [kurs, setKurs] = useState("")
 
     // get news
     const [direcs, setDirecs] = useState([]);
@@ -91,9 +126,13 @@ export default function AdminProfile() {
                 if (fetchData.ok) {
                     let data = await fetchData.json();
                     setDirecs(data);
+
                     setDirectionName(data.first_name);
                     setNews_tavsif(data.last_name);
                     setEmail(data.email);
+                    setFacul(data.fakultet);
+                    setUnv(data.university);
+                    setKurs(data.oquvyili);
 
                     console.log(data);
                 } else if (fetchData.status === 401) {
@@ -159,10 +198,15 @@ export default function AdminProfile() {
         //     image: image
         // };
         const readyD = new FormData();
+        if (image) {
+            readyD.append('image', image);
+        }
         readyD.append('first_name', direction_name); // o'rniga input qiymatini qo'ying
         readyD.append("last_name", news_tavsif);
-        readyD.append('image', image);
         readyD.append('email', email);
+        readyD.append('fakultet', facul);
+        readyD.append('university', unv);
+        readyD.append('oquvyili', kurs)
 
 
         if (timeDiff < 900) {
@@ -178,8 +222,9 @@ export default function AdminProfile() {
                 if (fetchData.ok) {
                     const result = await fetchData.json();
                     fourceUpdate();
-                    closeModal()
-                    console.log('direction created sccff:', result);
+                    setImage(null);
+                    console.log('direction updated sccff:', result);
+
                 } else if (fetchData.status === 401) {
                     console.error('Token yaroqsiz. Login sahifasiga yonaltirilmoqda...');
                     Cookies.remove('role')
@@ -228,61 +273,115 @@ export default function AdminProfile() {
     }
     // END update news
 
+
+
     return (
-        <div className='adm_prf'>
-            <h1>Profil</h1>
-            <h6>Rasm va shaxsiy ma'lumotlarni yangilang.</h6>
-            <h3>Shaxsiy ma'lumotlar</h3>
-            <h5>Shaxsiy maʼlumotlaringizni shu yerda yangilang.</h5>
-            <hr />
-            <div className="prf_fio">
-                <h4>F.I.O</h4>
-                <span>
-                    <input value={direction_name} onChange={(e) => setDirectionName(e.target.value)} type="text" placeholder='Ismingizni kiriting' />
-                    <input value={news_tavsif} onChange={(e) => setNews_tavsif(e.target.value)} type="text" placeholder='Familiyangizni kiriting' />
-                </span>
-            </div>
-            <div className="prf_email">
-                <h4>Elektron pochta manzili</h4>
-                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder='Emailingizni kiriting' />
-            </div>
-            <hr />
-            <div className="prf_img">
-                <span>
-                    <h4>Sizning suratingiz</h4>
-                    <p>Bu sizning profilingizda ko'rsatiladi.</p>
-                </span>
-                <div className='prf_file_img'>
-                    <img src={direcs?.image} alt="profile image" />
-                    <div
-                        className="news-upload-box"
-                        onDrop={handleDrop}
-                        onDragOver={(e) => e.preventDefault()}
-                    >
-                        <label htmlFor="fileInput" className="news-upload-label">
-                            <div className="news-upload-content">
-                                <img src={upload_icon} alt="upload" className="news-upload-icon" />
-                                <p>Yuklash uchun bosing <span>yoki sudrab olib tashlang</span></p>
-                                <h6>SVG, PNG, JPG yoki GIF (maks. 800x400px)</h6>
-                            </div>
-                            <input
-                                id="fileInput"
-                                type="file"
-                                accept=".png,.jpg,.jpeg,.gif,.svg"
-                                onChange={handleChange}
-                                hidden
+        <section className='user_prf'>
+            <div className='adm_prf'>
+                <div className="theme_head">
+                    <ul>
+                        <li>Bosh sahifa </li>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none">
+                            <path
+                                d="M6.83 5.29001L2.59 1.05001C2.49704 0.956281 2.38644 0.881887 2.26458 0.831118C2.14272 0.780349 2.01202 0.754211 1.88 0.754211C1.74799 0.754211 1.61729 0.780349 1.49543 0.831118C1.37357 0.881887 1.26297 0.956281 1.17 1.05001C0.983753 1.23737 0.879211 1.49082 0.879211 1.75501C0.879211 2.0192 0.983753 2.27265 1.17 2.46001L4.71 6.00001L1.17 9.54001C0.983753 9.72737 0.879211 9.98082 0.879211 10.245C0.879211 10.5092 0.983753 10.7626 1.17 10.95C1.26344 11.0427 1.37426 11.116 1.4961 11.1658C1.61793 11.2155 1.7484 11.2408 1.88 11.24C2.01161 11.2408 2.14207 11.2155 2.26391 11.1658C2.38575 11.116 2.49656 11.0427 2.59 10.95L6.83 6.71001C6.92373 6.61705 6.99813 6.50645 7.04889 6.38459C7.09966 6.26273 7.1258 6.13202 7.1258 6.00001C7.1258 5.868 7.09966 5.73729 7.04889 5.61543C6.99813 5.49357 6.92373 5.38297 6.83 5.29001Z"
+                                fill="#717680"
                             />
-                        </label>
-                        {error && <p className="news-error-text">{error}</p>}
-                        {image && <img src={URL.createObjectURL(image)} alt="Yuklangan rasm" className="news-preview-img" />}
+                        </svg>
+                        <li>Profile</li>
+                    </ul>
+                </div>
+                <h1>Profil</h1>
+                <h6>Rasm va shaxsiy ma'lumotlarni yangilang.</h6>
+                <h3>Shaxsiy ma'lumotlar</h3>
+                <h5>Shaxsiy maʼlumotlaringizni shu yerda yangilang.</h5>
+                <hr />
+                <div className="prf_fio">
+                    <h4>F.I.O</h4>
+                    <span>
+                        <input value={direction_name} onChange={(e) => setDirectionName(e.target.value)} type="text" placeholder='Ismingizni kiriting' />
+                        <input value={news_tavsif} onChange={(e) => setNews_tavsif(e.target.value)} type="text" placeholder='Familiyangizni kiriting' />
+                    </span>
+                </div>
+                <div className="prf_email">
+                    <h4>Elektron pochta manzili</h4>
+                    <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder='Emailingizni kiriting' />
+                </div>
+                <hr />
+                <div className="prf_img">
+                    <span>
+                        <h4>Sizning suratingiz</h4>
+                        <p>Bu sizning profilingizda ko'rsatiladi.</p>
+                    </span>
+                    <div className='prf_file_img'>
+                        {
+                            direcs?.image ?
+                                <img src={direcs?.image} alt="profile image" /> :
+                                <p>rasm yuklanmagan</p>
+
+                        }
+                        <div
+                            className="news-upload-box"
+                            onDrop={handleDrop}
+                            onDragOver={(e) => e.preventDefault()}
+                        >
+                            <label htmlFor="fileInput" className="news-upload-label">
+                                <div className="news-upload-content">
+                                    <img src={upload_icon} alt="upload" className="news-upload-icon" />
+                                    <p>Yuklash uchun bosing <span>yoki sudrab olib tashlang</span></p>
+                                    <h6>SVG, PNG, JPG yoki GIF (maks. 800x400px)</h6>
+                                </div>
+                                <input
+                                    id="fileInput"
+                                    type="file"
+                                    accept=".png,.jpg,.jpeg,.gif,.svg"
+                                    onChange={handleChange}
+                                    hidden
+                                />
+                            </label>
+                            {error && <p className="news-error-text">{error}</p>}
+                            {image && <img src={URL.createObjectURL(image)} alt="Yuklangan rasm" className="news-preview-img" />}
+                        </div>
                     </div>
                 </div>
+                <hr />
+                <div className="prf_selecs_wrap">
+                    <div>
+                        <h4>Universitet nomi</h4>
+                        <select value={unv} onChange={(e) => setUnv(e.target.value)}>
+                            {unvs?.map((item) => {
+                                return (
+                                    <option value={item.id} key={item.id}>{item.name}</option>
+                                )
+                            })}
+                        </select>
+                    </div>
+                    <div>
+                        <h4>O‘quv kursi</h4>
+                        <select value={kurs} onChange={(e) => setKurs(e.target.value)}>
+                            <option value="1">1-kurs</option>
+                            <option value="2">2-kurs</option>
+                            <option value="3">3-kurs</option>
+                            <option value="4">4-kurs</option>
+                        </select>
+                    </div>
+                    <div>
+                        <h4>Fakultet</h4>
+                        <select value={facul} onChange={(e) => setFacul(e.target.value)}>
+                            {faculs?.map((item) => {
+                                return (
+                                    <option value={item.id} key={item.id}>{item.name}</option>
+                                )
+                            })}
+                        </select>
+                    </div>
+                </div>
+                <hr />
+                <div className="prf_upd_can_wrap">
+                    <button type="button" className='btn_outline'>Bekor qilish</button>
+                    <button onClick={(e) => updateDirec(e)} type="button" className='btn_primary'>Saqlash</button>
+                </div>
             </div>
-            <hr />
-            <div className="prf_upd_can_wrap">
-                <button type="button" className='btn_outline'>Bekor qilish</button>
-                <button onClick={(e)=>updateDirec(e)} type="button" className='btn_primary'>Saqlash</button>
-            </div>
-        </div>
+        </section>
+
     )
 }

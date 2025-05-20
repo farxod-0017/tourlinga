@@ -21,6 +21,9 @@ import AdminTermins from './AdminPages/AdminTermins.jsx'
 import AdminQuestions from './AdminPages/AdminQuestion.jsx'
 import TermData from './Pages/TermData.jsx'
 import QuestData from './Pages/QuestData.jsx'
+import UserProfile from './Pages/UserProfile.jsx'
+import Statistics from './Pages/Statistics.jsx'
+import AdminStatistics from './AdminPages/AdminStatistics.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -33,7 +36,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='/questions' element={<QuestData/>} />
           <Route path='/login' element={<Login/>}/>
           <Route path='/sign-up' element={<SignUp/>}/>
-          <Route path='/profile'/>
+          <Route path='/profile' element={<UserProfile/>}/>
+          <Route path='/statistics' element={<Statistics/>}/>
         </Route>
         <Route path='/admin' element={<Admin/>}>
           <Route path='/admin' element={<AdminHome/>}/>
@@ -44,6 +48,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='/admin/themes' element={<AdminThemes/>}/>
           <Route path='/admin/terms' element={<AdminTermins/>}/>
           <Route path='/admin/questions' element={<AdminQuestions/>}/>
+          <Route path='/admin/students' element={<AdminStatistics/>}/>
         </Route>
         <Route path='*' element={<ErrorPage/>}/>
       </Routes>

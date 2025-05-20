@@ -75,6 +75,7 @@ export default function () {
                 const stored_time = new Date().toISOString();
                 saveEncryptedCookie('stored_time', stored_time);
                 saveEncryptedCookie('refresh_token', data.refresh);
+                sessionStorage.setItem('userId', data.user.id)
                 // saveEncryptedCookie('role', data.user.role);
                 // saveEncryptedCookie('user_id', data.user.id);
 
@@ -104,7 +105,7 @@ export default function () {
                 <h5>Telefon raqam</h5>
                 <input ref={loginId} type="text" placeholder="Telefon raqamingizni kiriting" />
                 <h5>Parol</h5>
-                <input ref={password} type="text" placeholder=" Enter password" />
+                <input ref={password} type="password" placeholder=" Enter password" />
                 <span>
                     <span>
                         <input type="checkbox" />

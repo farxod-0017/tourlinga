@@ -144,8 +144,7 @@ export default function AdminUnvs() {
     }
     // create news END
 
-    // get news
-    // Fake NEWS Array
+    // get Unvs
     const [org_unvs, setOrg_unvs] = useState([])
     const [direcs, setDirecs] = useState([]);
     const getDirecs = useCallback(async () => {
@@ -213,6 +212,7 @@ export default function AdminUnvs() {
     useEffect(() => {
         getDirecs();
     }, [ignore, getDirecs]);
+    // END get Unvs
 
     function showPpModal(e, id) {
         let new_state = org_unvs?.map((item) => item.id === id

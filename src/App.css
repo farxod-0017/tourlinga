@@ -88,6 +88,14 @@ body {
     margin-left: 10px;
 }
 
+.highlight {
+    color: #1A237E;
+    background-color: #ffeb3b;
+    /* Engil sariq */
+    padding: 0 2px;
+    border-radius: 2px
+}
+
 /* Animatsiya qoidalari */
 @keyframes spin {
     0% {

@@ -43,7 +43,7 @@ export default function AdminQuestions() {
 
     const handleSave = () => {
         console.log("To'g'ri javob:", selected);
-        console.log(inputs);      
+        console.log(inputs);
     };
 
 
@@ -81,6 +81,78 @@ export default function AdminQuestions() {
 
     // END universal blocks
 
+    const [termTheme, setTermTheme] = useState(0);
+
+    // END delete news
+    const [org_unvs, setOrg_unvs] = useState([])
+    const getThemes = useCallback(async () => {
+        const current_time = new Date();
+        const stored_time = takeOriginalValue('stored_time');
+        const timeDiff = (current_time - new Date(stored_time)) / 60000;
+        if (timeDiff < 900) {
+            try {
+                let fetchData = await fetch(`${mURL}/main/mavzular/`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${takeOriginalValue('access_token')}`
+                    }
+                });
+                if (fetchData.ok) {
+                    let data = await fetchData.json();
+                    setOrg_unvs(data);
+                    let first_id = data[0]?.id;
+                    setTermTheme(first_id)
+                    console.log(data);
+                } else if (fetchData.status === 401) {
+                    console.log('Token tekshirilmoqda...');
+                    Cookies.remove('role');
+                    navigate('/')
+                } else {
+                    console.log('Xatolik:', fetchData.statusText);
+                }
+            } catch (error) {
+                console.log(`get Directionsda xatolik:, error`);
+            }
+        } else {
+            // Token muddati tugagan, refresh orqali yangi token olish
+            let readyPost = {
+                userId: takeOriginalValue('user_id'),
+                refreshToken: takeOriginalValue('refresh_token')
+            }
+            try {
+                let refreshResponse = await fetch(`${mURL}/auth/refresh`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': "application/json",
+                    },
+                    body: JSON.stringify(readyPost)
+                });
+                if (refreshResponse.ok) {
+                    let data = await refreshResponse.json();
+                    saveEncryptedCookie('refresh_token', data.refresh_token);
+                    saveEncryptedCookie('access_token', data.access_token);
+                    let current_time = new Date().toISOString();
+                    saveEncryptedCookie('stored_time', current_time);
+                    // Yangi token bilan so'rovni qayta amalga oshirish
+                    getDirecs();
+                } else {
+                    console.log('Refresh token yaroqsiz. Login sahifasiga yonaltirilmoqda...');
+                    Cookies.remove('role')
+                    navigate('/')
+                }
+            } catch (error) {
+                console.error('Serverga ulanishda xatolik (refresh):', error.message);
+            }
+        }
+
+    }, [navigate, saveEncryptedCookie, takeOriginalValue]);
+
+    useEffect(() => {
+        getThemes();
+    }, [ignore, getThemes]);
+
+    // END get theme
+
     // create news
     const [direction_name, setDirectionName] = useState("");
     function openCreateModal() {
@@ -89,7 +161,7 @@ export default function AdminQuestions() {
         setDirectionName("");
         setTermTheme(org_unvs ? org_unvs[0]?.id : "");
         setSelected("");
-        setInputs({...inputs, A:"", B:"", C:""})
+        setInputs({ ...inputs, A: "", B: "", C: "" })
     }
     async function createDirection(e) {
         e.preventDefault();
@@ -98,11 +170,11 @@ export default function AdminQuestions() {
         const timeDiff = (currentTime - new Date(stored_time)) / 60000;
         let readyD = {
             title: direction_name,
-            A:inputs.A,
-            B:inputs.B,
-            C:inputs.C,
-            true_answer:selected,
-            mavzu_id:termTheme
+            A: inputs.A,
+            B: inputs.B,
+            C: inputs.C,
+            true_answer: selected,
+            mavzu_id: termTheme
         };
         // const readyD = new FormData();
         // readyD.append('title', direction_name); // o'rniga input qiymatini qo'ying
@@ -183,7 +255,6 @@ export default function AdminQuestions() {
     // create news END
 
     // get news
-    const [termTheme, setTermTheme] = useState("")
     const [direcs, setDirecs] = useState([]);
     const getDirecs = useCallback(async () => {
         const current_time = new Date();
@@ -199,7 +270,7 @@ export default function AdminQuestions() {
                 });
                 if (fetchData.ok) {
                     let data = await fetchData.json();
-                    setDirecs(data)
+                    setDirecs(data);
                     console.log(data);
                 } else if (fetchData.status === 401) {
                     console.log('Token tekshirilmoqda...');
@@ -259,7 +330,7 @@ export default function AdminQuestions() {
         setDirectionName(data.title);
         setTermTheme(data.mavzu_id);
         setSelected(data.true_answer);
-        setInputs({...inputs, A:data.A, B:data.B, C:data.C})
+        setInputs({ ...inputs, A: data.A, B: data.B, C: data.C })
         // setImage(data.image);
     };
 
@@ -270,11 +341,11 @@ export default function AdminQuestions() {
         const timeDiff = (currentTime - new Date(stored_time)) / 60000;
         let readyD = {
             title: direction_name,
-            A:inputs.A,
-            B:inputs.B,
-            C:inputs.C,
-            true_answer:selected,
-            mavzu_id:termTheme,
+            A: inputs.A,
+            B: inputs.B,
+            C: inputs.C,
+            true_answer: selected,
+            mavzu_id: termTheme,
         };
         // const readyD = new FormData();
         // readyD.append('title', direction_name);
@@ -288,7 +359,7 @@ export default function AdminQuestions() {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${takeOriginalValue('access_token')}`,
-                        'Content-Type':"application/json"
+                        'Content-Type': "application/json"
                     },
                     body: JSON.stringify(readyD)
                 });
@@ -428,71 +499,7 @@ export default function AdminQuestions() {
             }
         }
     }
-    // END delete news
-    const [org_unvs, setOrg_unvs] = useState([])
-    const getThemes = useCallback(async () => {
-        const current_time = new Date();
-        const stored_time = takeOriginalValue('stored_time');
-        const timeDiff = (current_time - new Date(stored_time)) / 60000;
-        if (timeDiff < 900) {
-            try {
-                let fetchData = await fetch(`${mURL}/main/mavzular/`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${takeOriginalValue('access_token')}`
-                    }
-                });
-                if (fetchData.ok) {
-                    let data = await fetchData.json();
-                    setOrg_unvs(data);
-                    console.log(data);
-                } else if (fetchData.status === 401) {
-                    console.log('Token tekshirilmoqda...');
-                    Cookies.remove('role');
-                    navigate('/')
-                } else {
-                    console.log('Xatolik:', fetchData.statusText);
-                }
-            } catch (error) {
-                console.log(`get Directionsda xatolik:, error`);
-            }
-        } else {
-            // Token muddati tugagan, refresh orqali yangi token olish
-            let readyPost = {
-                userId: takeOriginalValue('user_id'),
-                refreshToken: takeOriginalValue('refresh_token')
-            }
-            try {
-                let refreshResponse = await fetch(`${mURL}/auth/refresh`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': "application/json",
-                    },
-                    body: JSON.stringify(readyPost)
-                });
-                if (refreshResponse.ok) {
-                    let data = await refreshResponse.json();
-                    saveEncryptedCookie('refresh_token', data.refresh_token);
-                    saveEncryptedCookie('access_token', data.access_token);
-                    let current_time = new Date().toISOString();
-                    saveEncryptedCookie('stored_time', current_time);
-                    // Yangi token bilan so'rovni qayta amalga oshirish
-                    getDirecs();
-                } else {
-                    console.log('Refresh token yaroqsiz. Login sahifasiga yonaltirilmoqda...');
-                    Cookies.remove('role')
-                    navigate('/')
-                }
-            } catch (error) {
-                console.error('Serverga ulanishda xatolik (refresh):', error.message);
-            }
-        }
 
-    }, [navigate, saveEncryptedCookie, takeOriginalValue]);
-
-    useEffect(() => {
-        getThemes();
-    }, [ignore, getDirecs]);
     return (
         <section className="adm_news">
             {/* Modal Delete */}
@@ -635,21 +642,21 @@ export default function AdminQuestions() {
                         </tr>
                     </thead>
                     <tbody>
-                    {/* .slice()?.reverse()? */}
+                        {/* .slice()?.reverse()? */}
                         {direcs?.map((item, index) => (
                             <tr key={item.id}>
-                                <td>{index+1}</td>
+                                <td>{index + 1}</td>
                                 <td>{item.title}</td>
-                                <td className="admin-td-description">{org_unvs?.find(e=> e.id === +item.mavzu_id)?.name}</td>
-                                <td className={item.true_answer === "A" ? "adm_true_answer" :""}>
+                                <td className="admin-td-description">{org_unvs?.find(e => e.id === +item.mavzu_id)?.name}</td>
+                                <td className={item.true_answer === "A" ? "adm_true_answer" : ""}>
                                     {item.A}
                                 </td>
-                                <td className={item.true_answer === "B" ? "adm_true_answer" :""}>{item.B}</td>
-                                <td className={item.true_answer === "C" ? "adm_true_answer" :""}>{item.C}</td>
+                                <td className={item.true_answer === "B" ? "adm_true_answer" : ""}>{item.B}</td>
+                                <td className={item.true_answer === "C" ? "adm_true_answer" : ""}>{item.C}</td>
                                 <td>
                                     <div className="action-buttons">
                                         {/* <button className="btn view-btn">👁️</button> */}
-                                        <button onClick={(e) => openUpdateModal(e, { id: item.id, title: item.title, true_answer: item.true_answer, A:item.A, B:item.B, C:item.C, mavzu_id:item.mavzu_id })} className="btn edit-btn"><img src={edit} alt="" /></button>
+                                        <button onClick={(e) => openUpdateModal(e, { id: item.id, title: item.title, true_answer: item.true_answer, A: item.A, B: item.B, C: item.C, mavzu_id: item.mavzu_id })} className="btn edit-btn"><img src={edit} alt="" /></button>
                                         <button onClick={(e) => openDeleteModal(e, item.id, item.title)} className="btn delete-btn"><img src={del} alt="" /></button>
                                     </div>
                                 </td>

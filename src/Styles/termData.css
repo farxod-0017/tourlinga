@@ -13,7 +13,7 @@
     /* yarim shaffof oq rang */
     height: calc(100vh - 106px);
     /* backdrop-filter: blur(16px); */
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .theme_head {

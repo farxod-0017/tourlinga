@@ -34,6 +34,8 @@ export default function TermData() {
     // END universal blocks
 
     // get Themes
+    const [selectedTmId, setSelectedTmId] = useState(0);
+
     const [direcs, setDirecs] = useState([]);
     const getDirecs = useCallback(async () => {
         const current_time = new Date();
@@ -50,6 +52,8 @@ export default function TermData() {
                 if (fetchData.ok) {
                     let data = await fetchData.json();
                     setDirecs(data);
+                    let first_id = data[0]?.id
+                    setSelectedTmId(first_id)
                     console.log(data);
                 } else if (fetchData.status === 401) {
                     console.log('Token tekshirilmoqda...');
@@ -101,74 +105,75 @@ export default function TermData() {
 
     // END get news
 
-    // get news
+    // get terms
     const [terms, setTerms] = useState([]);
     const getTerms = useCallback(async () => {
         const current_time = new Date();
         const stored_time = takeOriginalValue('stored_time');
         const timeDiff = (current_time - new Date(stored_time)) / 60000;
-        if (timeDiff < 900) {
-            try {
-                let fetchData = await fetch(`${mURL}/main/terminlar`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${takeOriginalValue('access_token')}`
+        if (selectedTmId) {
+            if (timeDiff < 900) {
+                try {
+                    let fetchData = await fetch(`${mURL}/main/termin-by-mavzu/${selectedTmId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${takeOriginalValue('access_token')}`
+                        }
+                    });
+                    if (fetchData.ok) {
+                        let data = await fetchData.json();
+                        setTerms(data)
+                        console.log(data);
+                    } else if (fetchData.status === 401) {
+                        console.log('Token tekshirilmoqda...');
+                        Cookies.remove('role');
+                        navigate('/')
+                    } else {
+                        console.log('Xatolik:', fetchData.statusText);
                     }
-                });
-                if (fetchData.ok) {
-                    let data = await fetchData.json();
-                    setTerms(data)
-                    console.log(data);
-                } else if (fetchData.status === 401) {
-                    console.log('Token tekshirilmoqda...');
-                    Cookies.remove('role');
-                    navigate('/')
-                } else {
-                    console.log('Xatolik:', fetchData.statusText);
+                } catch (error) {
+                    console.log(`get Directionsda xatolik:, error`);
                 }
-            } catch (error) {
-                console.log(`get Directionsda xatolik:, error`);
-            }
-        } else {
-            // Token muddati tugagan, refresh orqali yangi token olish
-            let readyPost = {
-                userId: takeOriginalValue('user_id'),
-                refreshToken: takeOriginalValue('refresh_token')
-            }
-            try {
-                let refreshResponse = await fetch(`${mURL}/auth/refresh`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': "application/json",
-                    },
-                    body: JSON.stringify(readyPost)
-                });
-                if (refreshResponse.ok) {
-                    let data = await refreshResponse.json();
-                    saveEncryptedCookie('refresh_token', data.refresh_token);
-                    saveEncryptedCookie('access_token', data.access_token);
-                    let current_time = new Date().toISOString();
-                    saveEncryptedCookie('stored_time', current_time);
-                    // Yangi token bilan so'rovni qayta amalga oshirish
-                    getTerms();
-                } else {
-                    console.log('Refresh token yaroqsiz. Login sahifasiga yonaltirilmoqda...');
-                    Cookies.remove('role')
-                    navigate('/')
+            } else {
+                // Token muddati tugagan, refresh orqali yangi token olish
+                let readyPost = {
+                    userId: takeOriginalValue('user_id'),
+                    refreshToken: takeOriginalValue('refresh_token')
                 }
-            } catch (error) {
-                console.error('Serverga ulanishda xatolik (refresh):', error.message);
+                try {
+                    let refreshResponse = await fetch(`${mURL}/auth/refresh`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': "application/json",
+                        },
+                        body: JSON.stringify(readyPost)
+                    });
+                    if (refreshResponse.ok) {
+                        let data = await refreshResponse.json();
+                        saveEncryptedCookie('refresh_token', data.refresh_token);
+                        saveEncryptedCookie('access_token', data.access_token);
+                        let current_time = new Date().toISOString();
+                        saveEncryptedCookie('stored_time', current_time);
+                        // Yangi token bilan so'rovni qayta amalga oshirish
+                        getTerms();
+                    } else {
+                        console.log('Refresh token yaroqsiz. Login sahifasiga yonaltirilmoqda...');
+                        Cookies.remove('role')
+                        navigate('/')
+                    }
+                } catch (error) {
+                    console.error('Serverga ulanishda xatolik (refresh):', error.message);
+                }
             }
         }
-    }, [navigate, saveEncryptedCookie, takeOriginalValue]);
+
+    }, [navigate, selectedTmId, saveEncryptedCookie, takeOriginalValue]);
 
     useEffect(() => {
         getTerms();
-    }, [ignore, getDirecs]);
+    }, [ignore, getTerms]);
 
-    const [selectedTmId, setSelectedTmId] = useState(0);
-    let filterTerms = selectedTmId ? terms?.filter((item) => +item.mavzu_id === selectedTmId) : terms
-    // END get news
+    // END get terms
 
 
     return (
@@ -215,11 +220,11 @@ export default function TermData() {
                     <h4>To‘plangan ballar: <span>0</span></h4>
                 </div>
                 <div className="terms_grid">
-                    {filterTerms.length === 0 ?
-                        <h6>Bu mavzuga uchun Terminlar yuklanmagan</h6> :
+                    {terms?.length === 0 ?
+                        <h6>Bu mavzu uchun Terminlar yuklanmagan</h6> :
                         <noscript></noscript>
                     }
-                    {filterTerms?.map((item) => {
+                    {terms?.map((item) => {
                         return (
                             <div key={item.id} className="terms_wrap">
                                 <div className="terms_box">

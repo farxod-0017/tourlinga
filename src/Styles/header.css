@@ -1,6 +1,7 @@
 .header {
     padding: 18px 0px;
-    background-color: rgba(255, 255, 255, 0.7); /* yarim shaffof oq rang */
+    background-color: rgba(255, 255, 255, 0.7);
+    /* yarim shaffof oq rang */
     position: fixed;
     z-index: 100;
     width: 100%;
@@ -41,6 +42,7 @@
     line-height: 24px;
     color: rgba(83, 88, 98, 1);
 }
+
 .head_left nav a {
     position: relative;
     text-decoration: none;
@@ -69,6 +71,12 @@
     gap: 24px;
 }
 
+.head_acc_img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
 .head_right select {
     height: 20px;
     font-size: 14px;
@@ -82,6 +90,7 @@
     transition: border 0.2s ease, box-shadow 0.2s ease;
     background-color: transparent;
 }
+
 .head_right select option {
     text-align: center !important;
 }
@@ -411,6 +420,20 @@
     font-weight: 400;
     font-size: 14px;
     line-height: 20px;
+}
+
+.head_acc_text h5 {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: #181D27;
+}
+
+.head_acc_text h6 {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #535862;
 }
 
 @media(max-width:1200px) {

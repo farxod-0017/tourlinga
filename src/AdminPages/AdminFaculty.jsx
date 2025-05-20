@@ -148,8 +148,7 @@ export default function AdminFaculty() {
     }
     // create news END
 
-    // get news
-    // Fake NEWS Array
+    // get fakults
     const [org_unvs, setOrg_unvs] = useState([])
     const [direcs, setDirecs] = useState([]);
     const getDirecs = useCallback(async () => {
@@ -217,6 +216,7 @@ export default function AdminFaculty() {
     useEffect(() => {
         getDirecs();
     }, [ignore, getDirecs]);
+    // END get Facults
 
     function showPpModal(e, id) {
         let new_state = org_unvs?.map((item) => item.id === id

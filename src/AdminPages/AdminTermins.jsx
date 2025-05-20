@@ -104,13 +104,83 @@ export default function AdminTermins() {
 
     // END universal blocks
 
+    const [termTheme, setTermTheme] = useState("")
+
+    // get Themes
+    const [org_unvs, setOrg_unvs] = useState([])
+    const getThemes = useCallback(async () => {
+        const current_time = new Date();
+        const stored_time = takeOriginalValue('stored_time');
+        const timeDiff = (current_time - new Date(stored_time)) / 60000;
+        if (timeDiff < 900) {
+            try {
+                let fetchData = await fetch(`${mURL}/main/mavzular/`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${takeOriginalValue('access_token')}`
+                    }
+                });
+                if (fetchData.ok) {
+                    let data = await fetchData.json();
+                    setOrg_unvs(data);
+                    let first_id = data[0]?.id
+                    setTermTheme(first_id);
+                    console.log(data);
+                } else if (fetchData.status === 401) {
+                    console.log('Token tekshirilmoqda...');
+                    Cookies.remove('role');
+                    navigate('/')
+                } else {
+                    console.log('Xatolik:', fetchData.statusText);
+                }
+            } catch (error) {
+                console.log(`get Directionsda xatolik:, error`);
+            }
+        } else {
+            // Token muddati tugagan, refresh orqali yangi token olish
+            let readyPost = {
+                userId: takeOriginalValue('user_id'),
+                refreshToken: takeOriginalValue('refresh_token')
+            }
+            try {
+                let refreshResponse = await fetch(`${mURL}/auth/refresh`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': "application/json",
+                    },
+                    body: JSON.stringify(readyPost)
+                });
+                if (refreshResponse.ok) {
+                    let data = await refreshResponse.json();
+                    saveEncryptedCookie('refresh_token', data.refresh_token);
+                    saveEncryptedCookie('access_token', data.access_token);
+                    let current_time = new Date().toISOString();
+                    saveEncryptedCookie('stored_time', current_time);
+                    // Yangi token bilan so'rovni qayta amalga oshirish
+                    getDirecs();
+                } else {
+                    console.log('Refresh token yaroqsiz. Login sahifasiga yonaltirilmoqda...');
+                    Cookies.remove('role')
+                    navigate('/')
+                }
+            } catch (error) {
+                console.error('Serverga ulanishda xatolik (refresh):', error.message);
+            }
+        }
+
+    }, [navigate, saveEncryptedCookie, takeOriginalValue]);
+
+    useEffect(() => {
+        getThemes();
+    }, [ignore, getThemes]);
+    // END get themes
+
     // create news
     const [direction_name, setDirectionName] = useState("");
     const [news_tavsif, setNews_tavsif] = useState("");
     const [direction_name_eng, setDirectionNameEng] = useState("");
     const [news_tavsif_eng, setNews_tavsif_eng] = useState("");
     const [termin_havola, setTermin_havola] = useState("");
-    const [termTheme, setTermTheme] = useState("")
     function openCreateModal() {
         opentModal();
         setModalMood(true);
@@ -120,7 +190,7 @@ export default function AdminTermins() {
         setNews_tavsif_eng("")
         setImage("")
         setTermin_havola("")
-        setTermTheme("")
+        // setTermTheme("")
     }
     async function createDirection(e) {
         e.preventDefault();
@@ -454,72 +524,7 @@ export default function AdminTermins() {
         }
     }
     // END delete news
-    // get Themes
-    // Fake NEWS Array
-    const [org_unvs, setOrg_unvs] = useState([])
-    const getThemes = useCallback(async () => {
-        const current_time = new Date();
-        const stored_time = takeOriginalValue('stored_time');
-        const timeDiff = (current_time - new Date(stored_time)) / 60000;
-        if (timeDiff < 900) {
-            try {
-                let fetchData = await fetch(`${mURL}/main/mavzular/`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${takeOriginalValue('access_token')}`
-                    }
-                });
-                if (fetchData.ok) {
-                    let data = await fetchData.json();
-                    setOrg_unvs(data);
-                    console.log(data);
-                } else if (fetchData.status === 401) {
-                    console.log('Token tekshirilmoqda...');
-                    Cookies.remove('role');
-                    navigate('/')
-                } else {
-                    console.log('Xatolik:', fetchData.statusText);
-                }
-            } catch (error) {
-                console.log(`get Directionsda xatolik:, error`);
-            }
-        } else {
-            // Token muddati tugagan, refresh orqali yangi token olish
-            let readyPost = {
-                userId: takeOriginalValue('user_id'),
-                refreshToken: takeOriginalValue('refresh_token')
-            }
-            try {
-                let refreshResponse = await fetch(`${mURL}/auth/refresh`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': "application/json",
-                    },
-                    body: JSON.stringify(readyPost)
-                });
-                if (refreshResponse.ok) {
-                    let data = await refreshResponse.json();
-                    saveEncryptedCookie('refresh_token', data.refresh_token);
-                    saveEncryptedCookie('access_token', data.access_token);
-                    let current_time = new Date().toISOString();
-                    saveEncryptedCookie('stored_time', current_time);
-                    // Yangi token bilan so'rovni qayta amalga oshirish
-                    getDirecs();
-                } else {
-                    console.log('Refresh token yaroqsiz. Login sahifasiga yonaltirilmoqda...');
-                    Cookies.remove('role')
-                    navigate('/')
-                }
-            } catch (error) {
-                console.error('Serverga ulanishda xatolik (refresh):', error.message);
-            }
-        }
 
-    }, [navigate, saveEncryptedCookie, takeOriginalValue]);
-
-    useEffect(() => {
-        getThemes();
-    }, [ignore, getDirecs]);
     return (
         <section className="adm_news">
             {/* Modal Delete */}
@@ -677,10 +682,10 @@ export default function AdminTermins() {
                         </tr>
                     </thead>
                     <tbody>
-                    {/* direcs?.slice()?.reverse()?.map */}
+                        {/* direcs?.slice()?.reverse()?.map */}
                         {direcs?.map((item, index) => (
                             <tr key={item.id}>
-                                <td>{index+1}</td>
+                                <td>{index + 1}</td>
                                 <td>{item.uzbw}/{item.engw}</td>
                                 <td className="admin-td-description">{item.uzbwt} <br /> {item.engwt}</td>
                                 <td>

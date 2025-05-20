@@ -1,5 +1,5 @@
 import '../Styles/header.css'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 import acc_icon from "../Images/account-icon.png"
 import logo from '../Images/logo.svg'
@@ -10,7 +10,7 @@ import close_icon from "../Images/close_icon.svg"
 
 import { useRef, useState } from 'react'
 
-export default function Header() {
+export default function Header({ info }) {
     const mobileModal = useRef();
     const header_section = useRef();
     const [burger, setBurger] = useState(true)
@@ -24,15 +24,15 @@ export default function Header() {
         mobileModal.current.classList.remove("open_mob_modal");
         header_section.current.classList.remove("header_fixed")
     }
-    const isLogin = false
+    const isLogin = sessionStorage.getItem('userId');
 
     return (
         <section ref={header_section} className="header">
             <div ref={mobileModal} className="mobile_modal">
                 <nav>
-                    <Link to="!#">Bosh sahifa</Link>
-                    <Link to="!#">Biz haqimizda</Link>
-                    <Link to="!#">Statistika</Link>
+                    <Link to="/">Bosh sahifa</Link>
+                    <Link to="/contact">Biz haqimizda</Link>
+                    <Link to="/statistics">Statistika</Link>
                     <Link to="/terms">Terminlar</Link>
                     <Link to="/questions">Savol-javob</Link>
                 </nav>
@@ -42,18 +42,18 @@ export default function Header() {
                         <img src={search_icon} alt="" />
                         <input type="text" name='search_mob_modal' id='search_mob_modal' className='mob_search' placeholder='Qidirish' />
                     </label>
-                    {true ? (
+                    {isLogin ? (
                         <div className="mob_acc">
                             <div className="mob_acc_data">
-                                {!true ? (
-                                    <img src="" alt="" /> // url image
+                                {info?.image ? (
+                                    <img src={info?.image} alt="img" className='head_acc_img'  /> // url image
                                 ) :
                                     (
                                         <img className='account_img' src={acc_icon} alt="account image" />
                                     )}
                                 <div>
-                                    <h5>Olivia Rhye</h5>
-                                    <h6>olivia@untitledui.com</h6>
+                                    <h5>{info?.first_name + " " + info?.last_name}</h5>
+                                    <h6>{info?.email}</h6>
                                 </div>
                             </div>
                             <button type="button" className='logout-btn'>
@@ -88,28 +88,31 @@ export default function Header() {
                         </select>
                         {isLogin ? (
                             <div className="head_account head_unv">
-                                {!true ? (
-                                    <img src="" alt="" /> // url image
+                                {info?.image ? (
+                                    <img src={info?.image} alt="img" className='head_acc_img' /> // url image
                                 ) :
                                     (
                                         <img className='account_img' src={acc_icon} alt="account image" />
                                     )}
-                                <Link to={"/admin/profile"}>
+                                <Link to={"/profile"}>
                                     <div className='head_acc_text'>
-                                        <h5>Olivia Rhye</h5>
-                                        <h6>olivia@untitledui.com</h6>
+                                        <h5>{info?.first_name + " " + info?.last_name}</h5>
+                                        <h6>{info?.email}</h6>
                                     </div>
                                 </Link>
                                 <img className='log_out_icon' src={log_out_icon} alt="log-out icon" />
-                                <div className="user-info-box">
-                                    <div className="user-texts">
-                                        <p className="user-name">Ali Valiyev</p>
-                                        <p className="user-email">ali.valiyev@example.com</p>
+                                <NavLink to={"/profile"}>
+                                    <div className="user-info-box">
+                                        <div className="user-texts">
+                                            <p className="user-name">{info?.first_name + " " + info?.last_name}</p>
+                                            <p className="user-email">{info?.email}</p>
+                                        </div>
+                                        <button className="logout-btn" title="Log out">
+                                            <img src={log_out_icon} alt="" />
+                                        </button>
                                     </div>
-                                    <button className="logout-btn" title="Log out">
-                                        <img src={log_out_icon} alt="" />
-                                    </button>
-                                </div>
+                                </NavLink>
+
                             </div>
                         ) : (
                             <div className="head_login head_unv">

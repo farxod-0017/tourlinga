@@ -1,0 +1,31 @@
+.user_stat {
+    max-width: 1440px;
+    width: 100%;
+    margin: 128px auto 200px;
+    padding: 96px 155px;
+    background-color: white;
+    border-radius: 12px;
+}
+
+.user_stat_nav {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 12px;
+}
+
+.user_stat .user_stat_nav  a {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    vertical-align: middle;
+    color: #717680;
+}
+.user_stat .user_stat_nav a:nth-of-type(2) {
+    color: #044EFC;
+}
+.user_stat_box {
+    padding: 0;
+    min-height: auto;
+}

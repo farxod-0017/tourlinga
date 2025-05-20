@@ -34,6 +34,8 @@ export default function QuestData() {
 
     // END universal blocks
 
+    const [selectedTmId, setSelectedTmId] = useState(0);
+
     // get Themes
     const [direcs, setDirecs] = useState([]);
     const getDirecs = useCallback(async () => {
@@ -51,6 +53,8 @@ export default function QuestData() {
                 if (fetchData.ok) {
                     let data = await fetchData.json();
                     setDirecs(data);
+                    let first_id  = data[0]?.id
+                    setSelectedTmId(first_id);
                     console.log(data);
                 } else if (fetchData.status === 401) {
                     console.log('Token tekshirilmoqda...');
@@ -108,67 +112,69 @@ export default function QuestData() {
         const current_time = new Date();
         const stored_time = takeOriginalValue('stored_time');
         const timeDiff = (current_time - new Date(stored_time)) / 60000;
-        if (timeDiff < 900) {
-            try {
-                let fetchData = await fetch(`${mURL}/main/savollar`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${takeOriginalValue('access_token')}`
+
+        if (selectedTmId) {
+            if (timeDiff < 900) {
+                try {
+                    let fetchData = await fetch(`${mURL}/main/savollar-by-mavzu/${selectedTmId}/`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${takeOriginalValue('access_token')}`
+                        }
+                    });
+                    if (fetchData.ok) {
+                        let data = await fetchData.json();
+                        setTerms(data)
+                        console.log(data);
+                    } else if (fetchData.status === 401) {
+                        console.log('Token tekshirilmoqda...');
+                        Cookies.remove('role');
+                        navigate('/')
+                    } else {
+                        console.log('Xatolik:', fetchData.statusText);
                     }
-                });
-                if (fetchData.ok) {
-                    let data = await fetchData.json();
-                    setTerms(data)
-                    console.log(data);
-                } else if (fetchData.status === 401) {
-                    console.log('Token tekshirilmoqda...');
-                    Cookies.remove('role');
-                    navigate('/')
-                } else {
-                    console.log('Xatolik:', fetchData.statusText);
+                } catch (error) {
+                    console.log(`get Directionsda xatolik:, error`);
                 }
-            } catch (error) {
-                console.log(`get Directionsda xatolik:, error`);
-            }
-        } else {
-            // Token muddati tugagan, refresh orqali yangi token olish
-            let readyPost = {
-                userId: takeOriginalValue('user_id'),
-                refreshToken: takeOriginalValue('refresh_token')
-            }
-            try {
-                let refreshResponse = await fetch(`${mURL}/auth/refresh`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': "application/json",
-                    },
-                    body: JSON.stringify(readyPost)
-                });
-                if (refreshResponse.ok) {
-                    let data = await refreshResponse.json();
-                    saveEncryptedCookie('refresh_token', data.refresh_token);
-                    saveEncryptedCookie('access_token', data.access_token);
-                    let current_time = new Date().toISOString();
-                    saveEncryptedCookie('stored_time', current_time);
-                    // Yangi token bilan so'rovni qayta amalga oshirish
-                    getTerms();
-                } else {
-                    console.log('Refresh token yaroqsiz. Login sahifasiga yonaltirilmoqda...');
-                    Cookies.remove('role')
-                    navigate('/')
+            } else {
+                // Token muddati tugagan, refresh orqali yangi token olish
+                let readyPost = {
+                    userId: takeOriginalValue('user_id'),
+                    refreshToken: takeOriginalValue('refresh_token')
                 }
-            } catch (error) {
-                console.error('Serverga ulanishda xatolik (refresh):', error.message);
+                try {
+                    let refreshResponse = await fetch(`${mURL}/auth/refresh`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': "application/json",
+                        },
+                        body: JSON.stringify(readyPost)
+                    });
+                    if (refreshResponse.ok) {
+                        let data = await refreshResponse.json();
+                        saveEncryptedCookie('refresh_token', data.refresh_token);
+                        saveEncryptedCookie('access_token', data.access_token);
+                        let current_time = new Date().toISOString();
+                        saveEncryptedCookie('stored_time', current_time);
+                        // Yangi token bilan so'rovni qayta amalga oshirish
+                        getTerms();
+                    } else {
+                        console.log('Refresh token yaroqsiz. Login sahifasiga yonaltirilmoqda...');
+                        Cookies.remove('role')
+                        navigate('/')
+                    }
+                } catch (error) {
+                    console.error('Serverga ulanishda xatolik (refresh):', error.message);
+                }
             }
         }
-    }, [navigate, saveEncryptedCookie, takeOriginalValue]);
+
+    }, [navigate, selectedTmId, saveEncryptedCookie, takeOriginalValue]);
 
     useEffect(() => {
         getTerms();
-    }, [ignore, getDirecs]);
+    }, [ignore, getTerms]);
 
-    const [selectedTmId, setSelectedTmId] = useState(0);
-    let questions = selectedTmId ? terms?.filter((item) => +item.mavzu_id === selectedTmId) : terms
     // END get news
 
     const [answers, setAnswers] = useState([]);
@@ -196,7 +202,7 @@ export default function QuestData() {
     };
     // END delete news
 
-    const[result, setResult]  = useState([])
+    const [result, setResult] = useState([])
     const handleSubmit = async (e) => {
         console.log("APIga yuboriladi:", answers);
         // fetch("/api/submit", { method: "POST", body: JSON.stringify(answers) });
@@ -221,7 +227,7 @@ export default function QuestData() {
                 if (fetchData.ok) {
                     const result = await fetchData.json();
                     console.log('direction created sccff:', result);
-                    if(result.length > 0) {
+                    if (result.length > 0) {
                         setResult(result);
                         openDeleteModal()
                     }
@@ -282,8 +288,8 @@ export default function QuestData() {
                     <h4>Test muvaffaqiyatli topshirildi</h4>
                     <p>
                         Savollar soni: {result?.length}   <br />
-                        To‘g‘ri javoblar: {result?.filter((item)=> item.is_correct === true)?.length} <br />
-                        Notog‘ri javoblar: {result?.filter((item)=> item.is_correct === false)?.length}
+                        To‘g‘ri javoblar: {result?.filter((item) => item.is_correct === true)?.length} <br />
+                        Notog‘ri javoblar: {result?.filter((item) => item.is_correct === false)?.length}
                     </p>
                     <div className="del_btn_wrap">
                         <button id='yopish_btn_resul' onClick={closeDeleteModal} type="button">Yopish</button>
@@ -332,11 +338,11 @@ export default function QuestData() {
                     <h4>To‘plangan ballar: <span>0</span></h4>
                 </div>
                 <div className="terms_grid quest_grid">
-                    {questions.length === 0 ?
-                        <h6>Bu mavzuga uchun Terminlar yuklanmagan</h6> :
+                    {terms?.length === 0 ?
+                        <h6>Bu mavzu uchun Terminlar yuklanmagan</h6> :
                         <noscript></noscript>
                     }
-                    {questions.map((q, index) => (
+                    {terms?.map((q, index) => (
                         <div key={q.id} className='quest_box'>
                             <h4>{index + 1}. Savol</h4>
                             <h5>{q.title} </h5>
@@ -359,7 +365,7 @@ export default function QuestData() {
                         </div>
                     ))}
                     <hr />
-                    <button className='finish_quest btn_primary' id={answers.length !== questions.length ? "finish_btn_disabled" : ""} onClick={(e) => handleSubmit(e)} disabled={answers.length !== questions.length}>
+                    <button className='finish_quest btn_primary' id={answers.length !== terms.length ? "finish_btn_disabled" : ""} onClick={(e) => handleSubmit(e)} disabled={answers.length !== terms.length}>
                         Testni yakunlash
                     </button>
                 </div>

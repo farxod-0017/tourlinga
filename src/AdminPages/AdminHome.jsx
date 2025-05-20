@@ -108,10 +108,13 @@ export default function AdminHome() {
             <div className="stat_grid">
                 {Object.entries(direcs).map(([key, value]) => (
                     <div key={key} className='stat_box'>
-                        <h4>{key === "mavzu" ? "Mavzular soni" : key === "savol" ? "Savollar soni" : key === "termin" ? "Terminlar soni" : key === "talabalar" ? "Talabalar soni" : key==="universitetlar" ? "Universitetlar soni": key === "talabalar_ball" ? "To‘plangan ballar" : "Ko'rsatkich"}</h4>
+                        <h4>{key === "mavzu" ? "Mavzular soni" : key === "savol" ? "Savollar soni" : key === "termin" ? "Terminlar soni" : key === "talabalar" ? "Talabalar soni" : key === "universitetlar" ? "Universitetlar soni" : key === "talabalar_ball" ? "To‘plangan ballar" : "Ko'rsatkich"}</h4>
                         <h2>{value.current}</h2>
                         <div>
-                            <img src={arrow_up} alt="" />
+                            {value.percent_change >= 0 ?
+                                <img src={arrow_up} alt="" /> :
+                                <img src={arrow_down} alt="" />
+                            }
                             <h5>
                                 <span>{value.percent_change}%</span>
                                 vs last month

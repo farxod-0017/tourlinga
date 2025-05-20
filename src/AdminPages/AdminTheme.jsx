@@ -469,11 +469,11 @@ export default function AdminThemes() {
 
                             <div className="adm_unv_box_bot">
                                 <img src={users} alt="" />
-                                <h5> Terminlar soni: {item.termins?.length}</h5>
+                                <h5> Terminlar soni: {item.termins}</h5>
                             </div>
                             <div className="adm_unv_box_bot">
                                 <img src={savol} alt="" />
-                                <h5> Savollar soni: {item.savollar?.length}</h5>
+                                <h5> Savollar soni: {item.savollar}</h5>
                             </div>
                         </div>
                     )

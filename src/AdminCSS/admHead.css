@@ -9,6 +9,7 @@
     width: 100%;
     border-bottom: 1px solid #044efc3e;
     background-color: white;
+    z-index: 100;
 }
 
 .adm_head_right {

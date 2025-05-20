@@ -18,8 +18,8 @@ import CryptoJS from 'crypto-js';
 import { toast, ToastContainer } from 'react-toastify';
 
 export default function AdminStatistics() {
-
-    // universal blocks
+    
+     // universal blocks
     const navigate = useNavigate();
     const secret_key = import.meta.env.VITE_SECRET_KEY;
     const takeOriginalValue = useCallback((shifr_key) => {

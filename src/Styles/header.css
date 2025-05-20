@@ -408,6 +408,7 @@
 .mob_acc .mob_acc_data img {
     width: 40px;
     height: 40px;
+    border-radius: 50%;
 }
 
 .mob_acc_data h5 {

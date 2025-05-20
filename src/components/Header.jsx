@@ -26,6 +26,11 @@ export default function Header({ info }) {
     }
     const isLogin = sessionStorage.getItem('userId');
 
+    function logOut(e) {
+        sessionStorage.clear('userId');
+        window.location.href = ('/login')
+    }
+
     return (
         <section ref={header_section} className="header">
             <div ref={mobileModal} className="mobile_modal">
@@ -56,7 +61,7 @@ export default function Header({ info }) {
                                     <h6>{info?.email}</h6>
                                 </div>
                             </div>
-                            <button type="button" className='logout-btn'>
+                            <button onClick={(e)=>logOut(e)} type="button" className='logout-btn'>
                                 <img className='mob_log_out_icon' src={log_out_icon} alt="log-out icon" />
                             </button>
                         </div>
@@ -100,7 +105,7 @@ export default function Header({ info }) {
                                         <h6>{info?.email}</h6>
                                     </div>
                                 </Link>
-                                <img className='log_out_icon' src={log_out_icon} alt="log-out icon" />
+                                <img onClick={(e)=>logOut(e)} className='log_out_icon' src={log_out_icon} alt="log-out icon" />
                                 <NavLink to={"/profile"}>
                                     <div className="user-info-box">
                                         <div className="user-texts">

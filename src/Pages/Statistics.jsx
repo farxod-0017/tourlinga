@@ -19,6 +19,16 @@ import { toast, ToastContainer } from 'react-toastify';
 
 export default function Statistics() {
 
+
+    useEffect(() => {
+        if (!sessionStorage.getItem('userId')) {
+            let confirmation = confirm("Iltimos Statistika sahifasini kuzatish uchun tizimdan ro'yhatdan o'ting");
+            if (confirmation) {
+                window.location.href = "/login";
+            }
+            return;
+        }
+    }, []); // dependency array bo‘lishi shart
     // universal blocks
     const navigate = useNavigate();
     const secret_key = import.meta.env.VITE_SECRET_KEY;

@@ -2,11 +2,14 @@ import logo from "../Images/logo.svg"
 import search_icon from "../Images/search_icon.svg"
 
 import "../AdminCSS/admHead.css"
+import { NavLink } from "react-router-dom"
 
 export default function AdminHeader() {
     return (
         <section className="adm_header">
-            <img src={logo} alt="logo" />
+            <NavLink to={"/"}>
+                <img src={logo} alt="logo" />
+            </NavLink>
             <div className="adm_head_right">
                 <select>
                     <option value="1">(UZ)</option>

@@ -4,10 +4,15 @@ import "../AdminCSS/admBar.css"
 import acc_icon from "../Images/account-icon.png"
 import log_out_icon from "../Images/log_out_icon.svg"
 
-export default function AdminBar() {
+export default function AdminBar({info}) {
 
     let location = useLocation();
     let path = location.pathname
+
+    function logOut(e) {
+        sessionStorage.clear('userId');
+        window.location.href = ('/login')
+    }
     return (
         <div className="adm_bar">
             <div className="bar_top">
@@ -171,18 +176,18 @@ export default function AdminBar() {
                 <div className="bar_line"></div>
                 <div className="mob_acc">
                     <div className="mob_acc_data">
-                        {!true ? (
-                            <img src="" alt="" /> // url image
+                        {info?.image ? (
+                            <img src={info?.image} alt="" /> // url image
                         ) :
                             (
                                 <img className='account_img' src={acc_icon} alt="account image" />
                             )}
                         <div>
-                            <h5>Olivia Rhye</h5>
-                            <h6>olivia@untitledui.com</h6>
+                            <h5>{info?.fish}</h5>
+                            <h6>{info?.email}</h6>
                         </div>
                     </div>
-                    <button type="button" className='logout-btn'>
+                    <button onClick={(e)=>logOut(e)} type="button" className='logout-btn'>
                         <img className='mob_log_out_icon' src={log_out_icon} alt="log-out icon" />
                     </button>
                 </div>

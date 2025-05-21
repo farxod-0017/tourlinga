@@ -80,6 +80,8 @@ export default function AdminFaculty() {
             name: direction_name,
             university: unver_id
         };
+        console.log(readyD);
+        
         // const readyD = new FormData();
         // readyD.append('name', direction_name);
         // readyD.append('university', unver_id.current.value)
@@ -414,7 +416,8 @@ export default function AdminFaculty() {
                 });
                 if (fetchData.ok) {
                     let data = await fetchData.json();
-                    setUnv(data)
+                    setUnv(data);
+                    setUnver_id(data[0]?.id)
                     console.log(data);
                 } else if (fetchData.status === 401) {
                     console.log('Token tekshirilmoqda...');

@@ -20,12 +20,11 @@ import { useDirecs } from "../context/DirecsContext"
 
 export default function Statistics() {
 
-
     useEffect(() => {
         if (!sessionStorage.getItem('userId') && !sessionStorage.getItem('statPromptShown')) {
-            sessionStorage.setItem('statPromptShown', 'true'); // bir marta ko‘rsatilsin
             const confirmation = confirm("Iltimos Statistika sahifasini kuzatish uchun tizimdan ro'yhatdan o'ting");
             if (confirmation) {
+                sessionStorage.setItem('statPromptShown', 'true'); // bir marta ko‘rsatilsin
                 return window.location.href = "/login";
             }
         }
@@ -445,10 +444,10 @@ export default function Statistics() {
                             <tr key={item.id}>
                                 <td>{index + 1}</td>
                                 <td className="stat_first_td">
-                                    {item.image ? 
-                                    <img src={item.image} alt="rasm" className="row-image" />
-                                    : <div className="avatar_fallback">{getUserInitials(item)}</div>
-                                }
+                                    {item.image ?
+                                        <img src={item.image} alt="rasm" className="row-image" />
+                                        : <div className="avatar_fallback">{getUserInitials(item)}</div>
+                                    }
                                     <span>
                                         <h5
                                             dangerouslySetInnerHTML={{

@@ -30,27 +30,27 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<App />}>
-          <Route path='/' element={<HomePage/>}/>
-          <Route path='/contact' element={<AboutPage/>}/>
-          <Route path='/terms' element={<TermData/>}/>
-          <Route path='/questions' element={<QuestData/>} />
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/sign-up' element={<SignUp/>}/>
-          <Route path='/profile' element={<UserProfile/>}/>
-          <Route path='/statistics' element={<Statistics/>}/>
+          <Route path='/' element={<HomePage />} />
+          <Route path='/contact' element={<AboutPage />} />
+          <Route path='/terms' element={<TermData />} />
+          <Route path='/questions' element={<QuestData />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/sign-up' element={<SignUp />} />
+          <Route path='/profile' element={<UserProfile />} />
+          <Route path='/statistics' element={<Statistics />} />
         </Route>
-        <Route path='/admin' element={<Admin/>}>
-          <Route path='/admin' element={<AdminHome/>}/>
-          <Route path='/admin/news' element={<AdminNews/>}/>
-          <Route path='/admin/universities' element={<AdminUnvs/>}/>
-          <Route path='/admin/faculties' element={<AdminFaculty/>}/>
-          <Route path='/admin/profile' element={<AdminProfile/>}/>
-          <Route path='/admin/themes' element={<AdminThemes/>}/>
-          <Route path='/admin/terms' element={<AdminTermins/>}/>
-          <Route path='/admin/questions' element={<AdminQuestions/>}/>
-          <Route path='/admin/students' element={<AdminStatistics/>}/>
+        <Route path='/admin' element={<Admin />}>
+          <Route path='/admin' element={<AdminHome />} />
+          <Route path='/admin/news' element={<AdminNews />} />
+          <Route path='/admin/universities' element={<AdminUnvs />} />
+          <Route path='/admin/faculties' element={<AdminFaculty />} />
+          <Route path='/admin/profile' element={<AdminProfile />} />
+          <Route path='/admin/themes' element={<AdminThemes />} />
+          <Route path='/admin/terms' element={<AdminTermins />} />
+          <Route path='/admin/questions' element={<AdminQuestions />} />
+          <Route path='/admin/students' element={<AdminStatistics />} />
         </Route>
-        <Route path='*' element={<ErrorPage/>}/>
+        <Route path='*' element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

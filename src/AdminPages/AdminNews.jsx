@@ -275,8 +275,10 @@ export default function AdminNews() {
         // };
         const readyD = new FormData();
         readyD.append('title', direction_name); // o'rniga input qiymatini qo'ying
-        readyD.append("content", news_tavsif)
-        readyD.append('image', image); // bu endi real File obyekt
+        readyD.append("content", news_tavsif);
+        if(image) {
+            readyD.append('image', image); 
+        }
 
         if (timeDiff < 900) {
             try {

@@ -161,7 +161,9 @@ export default function AdminProfile() {
         const readyD = new FormData();
         readyD.append('first_name', direction_name); // o'rniga input qiymatini qo'ying
         readyD.append("last_name", news_tavsif);
-        readyD.append('image', image);
+        if(image) {
+            readyD.append('image', image);
+        }
         readyD.append('email', email);
 
 
@@ -178,7 +180,6 @@ export default function AdminProfile() {
                 if (fetchData.ok) {
                     const result = await fetchData.json();
                     fourceUpdate();
-                    closeModal()
                     console.log('direction created sccff:', result);
                 } else if (fetchData.status === 401) {
                     console.error('Token yaroqsiz. Login sahifasiga yonaltirilmoqda...');

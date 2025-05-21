@@ -235,7 +235,9 @@ export default function TermData() {
                                     <h5>Ingliz</h5>
                                     <h3>{item.engw}</h3>
                                     <p>{item.engwt}</p>
-                                    <a href={item.link}>{item.link}</a>
+                                    <a href={item.link} target="_blank" rel="noopener noreferrer">
+                                        {item.link}
+                                    </a>
                                     <img src={item.image} alt="image of word" />
                                 </div>
                                 <div className="terms_box">

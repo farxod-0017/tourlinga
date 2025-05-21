@@ -14,7 +14,7 @@
     margin-bottom: 12px;
 }
 
-.user_stat .user_stat_nav  a {
+.user_stat .user_stat_nav a {
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;
@@ -22,10 +22,53 @@
     vertical-align: middle;
     color: #717680;
 }
+
 .user_stat .user_stat_nav a:nth-of-type(2) {
     color: #044EFC;
 }
+
 .user_stat_box {
     padding: 0;
     min-height: auto;
+}
+
+.stat_first_td {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stat_first_td img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.avatar_fallback {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #E6EDFF;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #044EFC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat_first_td h5 {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #181D27;
+}
+
+.stat_first_td h6 {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #535862;
 }

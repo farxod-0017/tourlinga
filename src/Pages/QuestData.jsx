@@ -10,6 +10,7 @@ import CryptoJS from 'crypto-js';
 
 import checked_inp from '../Images/checked_inp.svg'
 import success_icon from "../Images/success_icon.svg"
+import { useDirecs } from '../context/DirecsContext';
 
 export default function QuestData() {
 
@@ -201,6 +202,7 @@ export default function QuestData() {
     };
     function closeDeleteModal() {
         del_modal.current.classList.remove("open_news_modal");
+        setChecked(true)
     };
     // END delete news
 
@@ -280,6 +282,10 @@ export default function QuestData() {
         }
     };
 
+    function goNewTest() {
+        setChecked(true);
+        window.location.reload()
+    }
     // Birlashtirish:
     let merged = terms?.map(itemB => {
         let results = result?.results
@@ -289,8 +295,11 @@ export default function QuestData() {
             ...(itemA ? { your_answer: itemA.your_answer, correct_answer: itemA.correct_answer } : {}) // A arraydan answer qo‘shiladi, agar topilsa
         };
     });
+    console.log(merged);
 
-
+    // global state
+    const info = useDirecs()
+    // global stata END
     return (
         <section className='terms'>
             {/* Modal Result */}
@@ -350,40 +359,113 @@ export default function QuestData() {
                         <NavLink to={"/terms"}>Terminlar</NavLink>
                         <NavLink to={"/questions"}>Savol-Javob</NavLink>
                     </nav>
-                    <h4>To‘plangan ballar: <span>0</span></h4>
+                    <h4>To‘plangan ballar: <span>{info?.ball ? info?.ball : "0"}</span></h4>
                 </div>
-                <div className="terms_grid quest_grid">
-                    {terms?.length === 0 ?
-                        <h6>Bu mavzu uchun Savollar yuklanmagan</h6> :
-                        <noscript></noscript>
-                    }
-                    {terms?.map((q, index) => (
-                        <div key={q.id} className='quest_box'>
-                            <h4>{index + 1}. Savol</h4>
-                            <h5>{q.title} </h5>
-                            {["A", "B", "C"].map(opt => (
-                                <label key={opt} className={`custom-label ${answers.find(a => a.id === q.id)?.answer === opt ? "selected_anw" : ""
-                                    }`}>
-                                    <input
-                                        type="radio"
-                                        name={`question-${q.id}`}
-                                        value={opt}
-                                        checked={answers.find(a => a.id === q.id)?.answer === opt}
-                                        onChange={() => handleAnswerChange(q.id, opt)}
-                                    />
-                                    <span className='clone_inp_radio'>
-                                        <img src={checked_inp} alt="y" />
-                                    </span>
-                                    {opt} {q[opt]}
-                                </label>
-                            ))}
+                {
+                    checked ?
+                        <div className="terms_grid quest_grid">
+                            {merged?.length === 0 ?
+                                <h6>Bu mavzu uchun Savollar bajarilmadi</h6> :
+                                <noscript></noscript>
+                            }
+                            {merged?.map((q, index) => {
+                                return (
+                                    <div key={q.id} className='result_box'>
+                                        <h4>{index + 1}. Savol</h4>
+                                        <h5>{q.title} </h5>
+                                        {["A", "B", "C"].map((opt, index) => {
+                                            return (
+                                                <div key={index}>
+                                                    {
+                                                        q.your_answer === opt && q.correct_answer !== opt ?
+                                                            <span key={index} className='ch_f'>
+                                                                {q[opt]}
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
+                                                                    <g clipPath="url(#clip0_32_25265)">
+                                                                        <rect y="0.8" width="16" height="16" rx="4.8" fill="#F04438" fillOpacity="0.1" />
+                                                                        <path
+                                                                            d="M5.52517 6.52513L10.4749 11.4749M5.52517 11.4749L10.4749 6.52513"
+                                                                            stroke="#F04438"
+                                                                            strokeLinecap="round"
+                                                                            strokeLinejoin="round"
+                                                                        />
+                                                                    </g>
+                                                                    <rect x="0.4" y="1.2" width="15.2" height="15.2" rx="4.4" stroke="#F04438" strokeWidth="0.8" />
+                                                                    <defs>
+                                                                        <clipPath id="clip0_32_25265">
+                                                                            <rect y="0.8" width="16" height="16" rx="4.8" fill="white" />
+                                                                        </clipPath>
+                                                                    </defs>
+                                                                </svg>
+                                                            </span> :
+                                                            q.your_answer !== opt && q.correct_answer !== opt ?
+                                                                <span key={index} className='uch_f'>
+                                                                    {q[opt]}
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
+                                                                        <rect x="0.4" y="1.2" width="15.2" height="15.2" rx="4.4" fill="white" />
+                                                                        <rect x="0.4" y="1.2" width="15.2" height="15.2" rx="4.4" stroke="#D5D7DA" strokeWidth="0.8" />
+                                                                    </svg>
+                                                                </span> :
+                                                                <span key={index} className='t_t'>
+                                                                    {q[opt]}
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" viewBox="0 0 16 18" fill="none">
+                                                                        <rect x="0.4" y="2.2" width="15.2" height="15.2" rx="4.4" fill="#E8F8F1" />
+                                                                        <rect x="0.4" y="2.2" width="15.2" height="15.2" rx="4.4" stroke="#12B76A" strokeWidth="0.8" />
+                                                                        <path d="M11.7333 7L6.59994 12.1333L4.2666 9.8" stroke="#12B76A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                                                                    </svg>
+                                                                </span>
+                                                    }
+                                                </div>
+                                            )
+                                        })
+
+                                        }
+                                    </div>
+                                )
+                            })}
+                            <hr />
+                            <button onClick={goNewTest} className='finish_quest btn_primary'>
+                                Testlarga qaytish
+                            </button>
                         </div>
-                    ))}
-                    <hr />
-                    <button className='finish_quest btn_primary' id={answers.length !== terms.length ? "finish_btn_disabled" : ""} onClick={(e) => handleSubmit(e)} disabled={answers.length !== terms.length}>
-                        Testni yakunlash
-                    </button>
-                </div>
+
+                        :
+
+                        <div className="terms_grid quest_grid">
+                            {terms?.length === 0 ?
+                                <h6>Bu mavzu uchun Savollar yuklanmagan</h6> :
+                                <noscript></noscript>
+                            }
+                            {terms?.map((q, index) => (
+                                <div key={q.id} className='quest_box'>
+                                    <h4>{index + 1}. Savol</h4>
+                                    <h5>{q.title} </h5>
+                                    {["A", "B", "C"].map(opt => (
+                                        <label key={opt} className={`custom-label ${answers.find(a => a.id === q.id)?.answer === opt ? "selected_anw" : ""
+                                            }`}>
+                                            <input
+                                                type="radio"
+                                                name={`question-${q.id}`}
+                                                value={opt}
+                                                checked={answers.find(a => a.id === q.id)?.answer === opt}
+                                                onChange={() => handleAnswerChange(q.id, opt)}
+                                            />
+                                            <span className='clone_inp_radio'>
+                                                <img src={checked_inp} alt="y" />
+                                            </span>
+                                            {opt} {q[opt]}
+                                        </label>
+                                    ))}
+                                </div>
+                            ))}
+                            <hr />
+                            <button className='finish_quest btn_primary' id={answers.length !== terms.length ? "finish_btn_disabled" : ""} onClick={(e) => handleSubmit(e)} disabled={answers.length !== terms.length}>
+                                Testni yakunlash
+                            </button>
+                        </div>
+                }
+
+
             </div>
         </section>
     )

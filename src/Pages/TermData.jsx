@@ -9,6 +9,7 @@ import { mURL } from "../mURL"
 import { NavLink, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
+import { useDirecs } from '../context/DirecsContext';
 
 export default function TermData() {
 
@@ -175,6 +176,9 @@ export default function TermData() {
 
     // END get terms
 
+    // global state
+    const info = useDirecs()
+    // global state END
 
     return (
         <section className='terms'>
@@ -217,7 +221,7 @@ export default function TermData() {
                         <NavLink to={"/terms"}>Terminlar</NavLink>
                         <NavLink to={"/questions"}>Savol-Javob</NavLink>
                     </nav>
-                    <h4>To‘plangan ballar: <span>0</span></h4>
+                    <h4>To‘plangan ballar: <span>{info?.ball ? info?.ball : "0"}</span></h4>
                 </div>
                 <div className="terms_grid">
                     {terms?.length === 0 ?

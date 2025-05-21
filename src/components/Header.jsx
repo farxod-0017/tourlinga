@@ -31,6 +31,14 @@ export default function Header({ info }) {
         window.location.href = ('/login')
     }
 
+    const getUserInitials = (user) => {
+        if (!user) return '';
+        const firstInitial = user.first_name ? user.first_name[0].toUpperCase() : '';
+        const lastInitial = user.last_name ? user.last_name[0].toUpperCase() : '';
+        return firstInitial + lastInitial;
+    };
+
+
     return (
         <section ref={header_section} className="header">
             <div ref={mobileModal} className="mobile_modal">
@@ -51,7 +59,7 @@ export default function Header({ info }) {
                         <div className="mob_acc">
                             <div className="mob_acc_data">
                                 {info?.image ? (
-                                    <img src={info?.image} alt="img" className='head_acc_img'  /> // url image
+                                    <img src={info?.image} alt="img" className='head_acc_img' /> // url image
                                 ) :
                                     (
                                         <img className='account_img' src={acc_icon} alt="account image" />
@@ -61,7 +69,7 @@ export default function Header({ info }) {
                                     <h6>{info?.email}</h6>
                                 </div>
                             </div>
-                            <button onClick={(e)=>logOut(e)} type="button" className='logout-btn'>
+                            <button onClick={(e) => logOut(e)} type="button" className='logout-btn'>
                                 <img className='mob_log_out_icon' src={log_out_icon} alt="log-out icon" />
                             </button>
                         </div>
@@ -97,15 +105,14 @@ export default function Header({ info }) {
                                     <img src={info?.image} alt="img" className='head_acc_img' /> // url image
                                 ) :
                                     (
-                                        <img className='account_img' src={acc_icon} alt="account image" />
-                                    )}
+                                        <div className="avatar_fallback">{getUserInitials(info)}</div>)}
                                 <Link to={"/profile"}>
                                     <div className='head_acc_text'>
                                         <h5>{info?.first_name + " " + info?.last_name}</h5>
                                         <h6>{info?.email}</h6>
                                     </div>
                                 </Link>
-                                <img onClick={(e)=>logOut(e)} className='log_out_icon' src={log_out_icon} alt="log-out icon" />
+                                <img onClick={(e) => logOut(e)} className='log_out_icon' src={log_out_icon} alt="log-out icon" />
                                 <NavLink to={"/profile"}>
                                     <div className="user-info-box">
                                         <div className="user-texts">

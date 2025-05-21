@@ -8,6 +8,12 @@
     flex-direction: column;
     gap: 6px;
 }
+.termin_name_wrap {
+    flex-direction: row-reverse;
+}
+.termin_tavsif_wrap {
+    flex-direction: row-reverse;
+}
 
 .adm_termin_modal h1 {
     font-weight: 600;

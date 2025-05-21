@@ -18,8 +18,8 @@ import CryptoJS from 'crypto-js';
 import { toast, ToastContainer } from 'react-toastify';
 
 export default function AdminStatistics() {
-    
-     // universal blocks
+
+    // universal blocks
     const navigate = useNavigate();
     const secret_key = import.meta.env.VITE_SECRET_KEY;
     const takeOriginalValue = useCallback((shifr_key) => {
@@ -206,7 +206,7 @@ export default function AdminStatistics() {
 
                 try {
                     const res = await fetch(`${mURL}/users/list/?page=${a}`, {
-                        method:"GET",
+                        method: "GET",
                         headers: {
                             'Authorization': `Bearer ${takeOriginalValue('access_token')}`
                         }
@@ -393,6 +393,14 @@ export default function AdminStatistics() {
 
     // pagination logic END
 
+    const getUserInitials = (user) => {
+        if (!user) return '';
+        const firstInitial = user.first_name ? user.first_name[0].toUpperCase() : '';
+        const lastInitial = user.last_name ? user.last_name[0].toUpperCase() : '';
+        return firstInitial + lastInitial;
+    };
+
+
     return (
         <section className="adm_news adm_stud">
             {/* Modal Delete */}
@@ -459,8 +467,11 @@ export default function AdminStatistics() {
                         {currentData?.map((item, index) => (
                             <tr key={item.id}>
                                 <td>{index + 1}</td>
-                                <td>
-                                    <img src={item.image} alt="rasm" className="row-image" />
+                                <td className="stat_first_td">
+                                    {item.image ?
+                                        <img src={item.image} alt="rasm" className="row-image" />
+                                        : <div className="avatar_fallback">{getUserInitials(item)}</div>
+                                    }
                                     <span>
                                         <h5
                                             dangerouslySetInnerHTML={{

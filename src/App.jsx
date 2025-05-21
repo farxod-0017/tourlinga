@@ -9,6 +9,7 @@ import { mURL } from "./mURL"
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
+import { DirecsContext } from './context/DirecsContext'
 
 
 function App() {
@@ -64,7 +65,7 @@ function App() {
         if (fetchData.ok) {
           let data = await fetchData.json();
           console.log(data);
-          
+
           setDirecs(data);
         } else if (fetchData.status === 401) {
           console.log('Token tekshirilmoqda...');
@@ -109,7 +110,7 @@ function App() {
   }, [navigate, saveEncryptedCookie, takeOriginalValue]);
 
   useEffect(() => {
-    if(sessionStorage.getItem('userId')) {
+    if (sessionStorage.getItem('userId')) {
       getDirecs();
     }
   }, [ignore, getDirecs])
@@ -117,12 +118,15 @@ function App() {
 
   return (
     <>
-      <Header info={direcs}/>
-      <Outlet />
-      {location.pathname === "/sign-up" || location.pathname === "/login" || location.pathname === "/terms" || location.pathname === "/questions" ?
-        <div></div> :
-        <Footer />
-      }
+      <DirecsContext.Provider value={direcs}>
+        <Header info={direcs} />
+        <Outlet />
+        {location.pathname === "/sign-up" || location.pathname === "/login" || location.pathname === "/terms" || location.pathname === "/questions" ?
+          <div></div> :
+          <Footer />
+        }
+      </DirecsContext.Provider>
+
     </>
   )
 }

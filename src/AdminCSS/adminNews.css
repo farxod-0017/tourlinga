@@ -41,7 +41,7 @@
 
 .adm_news_modal {
     position: fixed;
-    z-index: 10;
+    z-index: 101;
     inset: 0;
     background: rgba(16, 24, 40, 0.7);
     backdrop-filter: blur(10px);

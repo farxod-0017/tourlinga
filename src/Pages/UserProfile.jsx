@@ -206,7 +206,7 @@ export default function UserProfile() {
         readyD.append('email', email);
         readyD.append('fakultet', facul);
         readyD.append('university', unv);
-        readyD.append('oquvyili', kurs)
+        readyD.append('oquvyili', kurs);
 
 
         if (timeDiff < 900) {
@@ -219,6 +219,7 @@ export default function UserProfile() {
                     },
                     body: readyD
                 });
+
                 if (fetchData.ok) {
                     const result = await fetchData.json();
                     fourceUpdate();

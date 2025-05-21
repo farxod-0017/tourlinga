@@ -16,6 +16,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import { toast, ToastContainer } from 'react-toastify';
+import { useDirecs } from "../context/DirecsContext"
 
 export default function Statistics() {
 
@@ -25,7 +26,7 @@ export default function Statistics() {
             sessionStorage.setItem('statPromptShown', 'true'); // bir marta ko‘rsatilsin
             const confirmation = confirm("Iltimos Statistika sahifasini kuzatish uchun tizimdan ro'yhatdan o'ting");
             if (confirmation) {
-             return   window.location.href = "/login";
+                return window.location.href = "/login";
             }
         }
     }, []);
@@ -204,7 +205,7 @@ export default function Statistics() {
 
                 try {
                     const res = await fetch(`${mURL}/users/list/?page=${a}`, {
-                        method:"GET",
+                        method: "GET",
                         headers: {
                             'Authorization': `Bearer ${takeOriginalValue('access_token')}`
                         }
@@ -343,6 +344,18 @@ export default function Statistics() {
     }, [getStats]);
     // statistika Top END
 
+    // global context
+    const info = useDirecs();
+    console.log(info);
+
+    // END global context
+    const getUserInitials = (user) => {
+        if (!user) return '';
+        const firstInitial = user.first_name ? user.first_name[0].toUpperCase() : '';
+        const lastInitial = user.last_name ? user.last_name[0].toUpperCase() : '';
+        return firstInitial + lastInitial;
+    };
+
     return (
         <section className="adm_news adm_stud user_stat">
             <span className="user_stat_nav">
@@ -358,7 +371,7 @@ export default function Statistics() {
             <h2 className="adm_stud_title">Statistika</h2>
 
             <div className="adm_home user_stat_box">
-                <h1>Xush kelibsiz !</h1>
+                <h1>Xush kelibsiz {info?.first_name} !</h1>
                 <h3>Ballaringizni kuzatib va ko‘paytirib boring.</h3>
                 <div className="stat_grid">
                     {Object.entries(stats).map(([key, value]) => (
@@ -431,14 +444,16 @@ export default function Statistics() {
                         {currentData?.map((item, index) => (
                             <tr key={item.id}>
                                 <td>{index + 1}</td>
-                                <td>
+                                <td className="stat_first_td">
+                                    {item.image ? 
                                     <img src={item.image} alt="rasm" className="row-image" />
+                                    : <div className="avatar_fallback">{getUserInitials(item)}</div>
+                                }
                                     <span>
                                         <h5
                                             dangerouslySetInnerHTML={{
                                                 __html: highlightText(item.fish, searchText),
                                             }}></h5>
-                                        <h6>{item.tel}</h6>
                                     </span>
                                 </td>
                                 <td className="admin-td-description">{org_unvs?.find((e) => e.id === +item.university)?.name}</td>

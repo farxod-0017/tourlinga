@@ -415,12 +415,24 @@
     font-weight: 600;
     font-size: 14px;
     line-height: 20px;
+    word-break: break-word;
+    /* yoki */
+    overflow-wrap: break-word;
+
+    /* qo‘shimcha himoya uchun */
+    white-space: normal;
 }
 
 .mob_acc_data h6 {
     font-weight: 400;
     font-size: 14px;
     line-height: 20px;
+    word-break: break-word;
+    /* yoki */
+    overflow-wrap: break-word;
+
+    /* qo‘shimcha himoya uchun */
+    white-space: normal;
 }
 
 .head_acc_text h5 {
@@ -428,6 +440,12 @@
     font-size: 14px;
     line-height: 20px;
     color: #181D27;
+    word-break: break-word;
+    /* yoki */
+    overflow-wrap: break-word;
+
+    /* qo‘shimcha himoya uchun */
+    white-space: normal;
 }
 
 .head_acc_text h6 {
@@ -435,6 +453,12 @@
     font-size: 14px;
     line-height: 20px;
     color: #535862;
+    word-break: break-word;
+    /* yoki */
+    overflow-wrap: break-word;
+
+    /* qo‘shimcha himoya uchun */
+    white-space: normal;
 }
 
 @media(max-width:1200px) {

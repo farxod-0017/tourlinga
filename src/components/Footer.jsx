@@ -28,7 +28,7 @@ export default function Footer() {
                 </div>
             </div>
             <hr />
-            <p>© 2025 RedFox agency. Barcha huquqlar himoyalangan.</p>
+            <p>© 2025 DevoSoft agency. Barcha huquqlar himoyalangan.</p>
         </section>
     )
 }

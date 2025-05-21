@@ -242,7 +242,9 @@ export default function TermData() {
                                     <h5>O‘zbek</h5>
                                     <h3>{item.uzbw}</h3>
                                     <p>{item.uzbwt}</p>
-                                    <a href={item.link}>{item.link}</a>
+                                    <a href={item.link} target="_blank" rel="noopener noreferrer">
+                                        {item.link}
+                                    </a>
                                     <img src={item.image} alt="image of word" />
                                 </div>
                             </div>

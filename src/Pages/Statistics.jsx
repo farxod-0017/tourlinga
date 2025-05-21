@@ -21,14 +21,15 @@ export default function Statistics() {
 
 
     useEffect(() => {
-        if (!sessionStorage.getItem('userId')) {
-            let confirmation = confirm("Iltimos Statistika sahifasini kuzatish uchun tizimdan ro'yhatdan o'ting");
+        if (!sessionStorage.getItem('userId') && !sessionStorage.getItem('statPromptShown')) {
+            sessionStorage.setItem('statPromptShown', 'true'); // bir marta ko‘rsatilsin
+            const confirmation = confirm("Iltimos Statistika sahifasini kuzatish uchun tizimdan ro'yhatdan o'ting");
             if (confirmation) {
-                window.location.href = "/login";
+             return   window.location.href = "/login";
             }
-            return;
         }
-    }, []); // dependency array bo‘lishi shart
+    }, []);
+
     // universal blocks
     const navigate = useNavigate();
     const secret_key = import.meta.env.VITE_SECRET_KEY;
@@ -201,23 +202,23 @@ export default function Statistics() {
             for (let a = 2; a <= fullPage; a++) {
                 console.log(a);
 
-                // try {
-                //     const res = await fetch(`${mURL}/users/list/?page=${a}`, {
-                //         method:"GET",
-                //         headers: {
-                //             'Authorization': `Bearer ${takeOriginalValue('access_token')}`
-                //         }
-                //     });
+                try {
+                    const res = await fetch(`${mURL}/users/list/?page=${a}`, {
+                        method:"GET",
+                        headers: {
+                            'Authorization': `Bearer ${takeOriginalValue('access_token')}`
+                        }
+                    });
 
-                //     if (res.ok) {
-                //         const data = await res.json();
-                //         allData = [...allData, ...data.results];
-                //     } else {
-                //         console.log(`Sahifa ${a} xatosi:`, res.statusText);
-                //     }
-                // } catch (error) {
-                //     console.log(`Sahifa ${a} yuklashda xatolik:`, error.message);
-                // }
+                    if (res.ok) {
+                        const data = await res.json();
+                        allData = [...allData, ...data.results];
+                    } else {
+                        console.log(`Sahifa ${a} xatosi:`, res.statusText);
+                    }
+                } catch (error) {
+                    console.log(`Sahifa ${a} yuklashda xatolik:`, error.message);
+                }
             }
 
             setDirecs(allData);
@@ -230,12 +231,12 @@ export default function Statistics() {
 
     useEffect(() => {
         if (fullPage > 1) {
-            // getFullStuds();
+            getFullStuds();
         }
     }, [getFullStuds]);
 
     useEffect(() => {
-        // getDirecs();
+        getDirecs();
     }, [ignore, getDirecs]);
     // END get news
 
@@ -357,7 +358,7 @@ export default function Statistics() {
             <h2 className="adm_stud_title">Statistika</h2>
 
             <div className="adm_home user_stat_box">
-                <h1>Xush kelibsiz, Eshmat!</h1>
+                <h1>Xush kelibsiz !</h1>
                 <h3>Ballaringizni kuzatib va ko‘paytirib boring.</h3>
                 <div className="stat_grid">
                     {Object.entries(stats).map(([key, value]) => (

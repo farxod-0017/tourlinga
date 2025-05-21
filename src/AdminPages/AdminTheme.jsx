@@ -337,11 +337,9 @@ export default function AdminThemes() {
                         'Authorization': `Bearer ${takeOriginalValue('access_token')}`
                     },
                 });
-                const result = await fetchData.json();
-                console.log(result);
-                if (result.ok) {
-                    fourceUpdate();
-                }
+
+                fourceUpdate();
+                closeDeleteModal();
                 //   if (fetchData.ok) {
                 //     fourceUpdate();
                 //     closeDeleteModal()
@@ -358,7 +356,6 @@ export default function AdminThemes() {
                 console.log('Serverga ulanishda xatolik:', error.message);
             } finally {
                 setIsLoading(false);
-                closeDeleteModal()
             }
         } else {
             // Token muddati tugagan, refresh orqali yangi token olish

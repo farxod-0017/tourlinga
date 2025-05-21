@@ -53,7 +53,7 @@ export default function QuestData() {
                 if (fetchData.ok) {
                     let data = await fetchData.json();
                     setDirecs(data);
-                    let first_id  = data[0]?.id
+                    let first_id = data[0]?.id
                     setSelectedTmId(first_id);
                     console.log(data);
                 } else if (fetchData.status === 401) {
@@ -193,6 +193,8 @@ export default function QuestData() {
     };
 
     // delete news
+    const [checked, setChecked] = useState(false);
+
     let del_modal = useRef("");
     function openDeleteModal(e, id, title) {
         del_modal.current.classList.add("open_news_modal");
@@ -227,7 +229,7 @@ export default function QuestData() {
                 if (fetchData.ok) {
                     const result = await fetchData.json();
                     console.log('direction created sccff:', result);
-                    if (result.length > 0) {
+                    if (result.results.length > 0) {
                         setResult(result);
                         openDeleteModal()
                     }
@@ -278,6 +280,16 @@ export default function QuestData() {
         }
     };
 
+    // Birlashtirish:
+    let merged = terms?.map(itemB => {
+        let results = result?.results
+        let itemA = results?.find(a => a.id === itemB.id);
+        return {
+            ...itemB,
+            ...(itemA ? { your_answer: itemA.your_answer, correct_answer: itemA.correct_answer } : {}) // A arraydan answer qo‘shiladi, agar topilsa
+        };
+    });
+
 
     return (
         <section className='terms'>
@@ -287,9 +299,12 @@ export default function QuestData() {
                     <img src={success_icon} alt="" />
                     <h4>Test muvaffaqiyatli topshirildi</h4>
                     <p>
-                        Savollar soni: {result?.length}   <br />
-                        To‘g‘ri javoblar: {result?.filter((item) => item.is_correct === true)?.length} <br />
-                        Notog‘ri javoblar: {result?.filter((item) => item.is_correct === false)?.length}
+                        Savollar soni: {result?.results?.length}   <br />
+                        To‘g‘ri javoblar: {result?.total_correct} (siz bu testda {result?.score_added
+                        } ballni qo‘lga kiritdingiz) <br />
+                        Notog‘ri javoblar: {result?.results?.filter((item) => item.is_correct === false)?.length} <br />
+                        Sizning umumiy balingiz: {result?.new_total_score
+                        }
                     </p>
                     <div className="del_btn_wrap">
                         <button id='yopish_btn_resul' onClick={closeDeleteModal} type="button">Yopish</button>
@@ -339,7 +354,7 @@ export default function QuestData() {
                 </div>
                 <div className="terms_grid quest_grid">
                     {terms?.length === 0 ?
-                        <h6>Bu mavzu uchun Terminlar yuklanmagan</h6> :
+                        <h6>Bu mavzu uchun Savollar yuklanmagan</h6> :
                         <noscript></noscript>
                     }
                     {terms?.map((q, index) => (

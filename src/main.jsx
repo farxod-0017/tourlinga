@@ -22,8 +22,8 @@ import AdminQuestions from './AdminPages/AdminQuestion.jsx'
 import TermData from './Pages/TermData.jsx'
 import QuestData from './Pages/QuestData.jsx'
 import UserProfile from './Pages/UserProfile.jsx'
-import Statistics from './Pages/Statistics.jsx'
 import AdminStatistics from './AdminPages/AdminStatistics.jsx'
+import Statistics from './Pages/Statistics.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

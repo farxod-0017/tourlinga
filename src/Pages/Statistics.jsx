@@ -20,17 +20,8 @@ import { useDirecs } from "../context/DirecsContext"
 
 export default function Statistics() {
 
-    useEffect(() => {
-        if (!sessionStorage.getItem('userId') && !sessionStorage.getItem('statPromptShown')) {
-            const confirmation = confirm("Iltimos Statistika sahifasini kuzatish uchun tizimdan ro'yhatdan o'ting");
-            if (confirmation) {
-                sessionStorage.setItem('statPromptShown', 'true'); // bir marta ko‘rsatilsin
-                return window.location.href = "/login";
-            }
-        }
-    }, []);
-
     // universal blocks
+    
     const navigate = useNavigate();
     const secret_key = import.meta.env.VITE_SECRET_KEY;
     const takeOriginalValue = useCallback((shifr_key) => {
@@ -184,7 +175,7 @@ export default function Statistics() {
                 } else {
                     console.log('Refresh token yaroqsiz. Login sahifasiga yonaltirilmoqda...');
                     Cookies.remove('role')
-                    navigate('/')
+                    navigate('/login')
                 }
             } catch (error) {
                 console.error('Serverga ulanishda xatolik (refresh):', error.message);
@@ -356,142 +347,151 @@ export default function Statistics() {
     };
 
     return (
-        <section className="adm_news adm_stud user_stat">
-            <span className="user_stat_nav">
-                <NavLink to={'/'}>Bosh sahifa</NavLink>
-                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none">
-                    <path
-                        d="M6.83 5.29001L2.59 1.05001C2.49704 0.956281 2.38644 0.881887 2.26458 0.831118C2.14272 0.780349 2.01202 0.754211 1.88 0.754211C1.74799 0.754211 1.61729 0.780349 1.49543 0.831118C1.37357 0.881887 1.26297 0.956281 1.17 1.05001C0.983753 1.23737 0.879211 1.49082 0.879211 1.75501C0.879211 2.0192 0.983753 2.27265 1.17 2.46001L4.71 6.00001L1.17 9.54001C0.983753 9.72737 0.879211 9.98082 0.879211 10.245C0.879211 10.5092 0.983753 10.7626 1.17 10.95C1.26344 11.0427 1.37426 11.116 1.4961 11.1658C1.61793 11.2155 1.7484 11.2408 1.88 11.24C2.01161 11.2408 2.14207 11.2155 2.26391 11.1658C2.38575 11.116 2.49656 11.0427 2.59 10.95L6.83 6.71001C6.92373 6.61705 6.99813 6.50645 7.04889 6.38459C7.09966 6.26273 7.1258 6.13202 7.1258 6.00001C7.1258 5.868 7.09966 5.73729 7.04889 5.61543C6.99813 5.49357 6.92373 5.38297 6.83 5.29001Z"
-                        fill="#717680"
-                    />
-                </svg>
-                <NavLink to={'/statistics'}>Statistika</NavLink>
-            </span>
-            <h2 className="adm_stud_title">Statistika</h2>
+        <div className="full_stat">
+            { sessionStorage.getItem('userId') ?
+                <section className="adm_news adm_stud user_stat">
+                    <span className="user_stat_nav">
+                        <NavLink to={'/'}>Bosh sahifa</NavLink>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none">
+                            <path
+                                d="M6.83 5.29001L2.59 1.05001C2.49704 0.956281 2.38644 0.881887 2.26458 0.831118C2.14272 0.780349 2.01202 0.754211 1.88 0.754211C1.74799 0.754211 1.61729 0.780349 1.49543 0.831118C1.37357 0.881887 1.26297 0.956281 1.17 1.05001C0.983753 1.23737 0.879211 1.49082 0.879211 1.75501C0.879211 2.0192 0.983753 2.27265 1.17 2.46001L4.71 6.00001L1.17 9.54001C0.983753 9.72737 0.879211 9.98082 0.879211 10.245C0.879211 10.5092 0.983753 10.7626 1.17 10.95C1.26344 11.0427 1.37426 11.116 1.4961 11.1658C1.61793 11.2155 1.7484 11.2408 1.88 11.24C2.01161 11.2408 2.14207 11.2155 2.26391 11.1658C2.38575 11.116 2.49656 11.0427 2.59 10.95L6.83 6.71001C6.92373 6.61705 6.99813 6.50645 7.04889 6.38459C7.09966 6.26273 7.1258 6.13202 7.1258 6.00001C7.1258 5.868 7.09966 5.73729 7.04889 5.61543C6.99813 5.49357 6.92373 5.38297 6.83 5.29001Z"
+                                fill="#717680"
+                            />
+                        </svg>
+                        <NavLink to={'/statistics'}>Statistika</NavLink>
+                    </span>
+                    <h2 className="adm_stud_title">Statistika</h2>
 
-            <div className="adm_home user_stat_box">
-                <h1>Xush kelibsiz {info?.first_name} !</h1>
-                <h3>Ballaringizni kuzatib va ko‘paytirib boring.</h3>
-                <div className="stat_grid">
-                    {Object.entries(stats).map(([key, value]) => (
-                        <div key={key} className='stat_box'>
-                            <h4>{key === "mavzu" ? "Mavzular soni" : key === "savol" ? "Savollar soni" : key === "termin" ? "Terminlar soni" : key === "talabalar" ? "Talabalar soni" : key === "universitetlar" ? "Universitetlar soni" : key === "talabalar_ball" ? "To‘plangan ballar" : "Ko'rsatkich"}</h4>
-                            <h2>{value.current}</h2>
-                            <div>
-                                {value.percent_change >= 0 ?
-                                    <img src={arrow_up} alt="" />
-                                    :
-                                    <img src={arrow_down} />
-                                }
-                                <h5>
-                                    <span>{value.percent_change}%</span>
-                                    vs last month
-                                </h5>
-                            </div>
+                    <div className="adm_home user_stat_box">
+                        <h1>Xush kelibsiz {info?.first_name} !</h1>
+                        <h3>Ballaringizni kuzatib va ko‘paytirib boring.</h3>
+                        <div className="stat_grid">
+                            {Object.entries(stats).map(([key, value]) => (
+                                <div key={key} className='stat_box'>
+                                    <h4>{key === "mavzu" ? "Mavzular soni" : key === "savol" ? "Savollar soni" : key === "termin" ? "Terminlar soni" : key === "talabalar" ? "Talabalar soni" : key === "universitetlar" ? "Universitetlar soni" : key === "talabalar_ball" ? "To‘plangan ballar" : "Ko'rsatkich"}</h4>
+                                    <h2>{value.current}</h2>
+                                    <div>
+                                        {value.percent_change >= 0 ?
+                                            <img src={arrow_up} alt="" />
+                                            :
+                                            <img src={arrow_down} />
+                                        }
+                                        <h5>
+                                            <span>{value.percent_change}%</span>
+                                            vs last month
+                                        </h5>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
+
+                    <div className="adm_news_head adm_stud_head">
+                        <span>
+                            <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+                                <option value="barcha">Universitetlar(barcha)</option>
+                                {org_unvs?.map((item) => {
+                                    return (
+                                        <option key={item.id} value={item.id}>{item.name}</option>
+                                    )
+                                })}
+                            </select>
+                            <select value={filterFacul} onChange={(e) => setFilterFacul(e.target.value)}>
+                                <option value="barcha">Fakultetlar(barcha)</option>
+                                {org_faculs?.map((item) => {
+                                    return (
+                                        <option key={item.id} value={item.id}>{item.name}</option>
+                                    )
+                                })}
+                            </select>
+                            <select value={filterKurs} onChange={(e) => setFilterKurs(e.target.value)}>
+                                <option value="barcha">O‘quv yili(barcha)</option>
+                                <option value="1">1-kurs</option>
+                                <option value="2">2-kurs</option>
+                                <option value="3">3-kurs</option>
+                                <option value="4">4-kurs</option>
+                            </select>
+                        </span>
+
+                        <input type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder="Search by FISh" />
+                    </div>
+                    {/* Modal Body Table */}
+                    <div className="extra_table_head">
+                        <h3>Talabalar ro‘yxati</h3>
+                        <span>{fullNumberSuds} foydalanuvchi</span>
+                    </div>
+                    <div className="table-wrapper">
+                        <table className="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>T/R</th>
+                                    <th>FIO</th>
+                                    <th>OTM</th>
+                                    <th>Fakultet</th>
+                                    <th>O‘quv yili</th>
+                                    <th>Ballar(Σ:{currentData?.reduce((sum, student) => sum + student.ball, 0)})</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currentData?.map((item, index) => (
+                                    <tr key={item.id}>
+                                        <td>{index + 1}</td>
+                                        <td className="stat_first_td">
+                                            {item.image ?
+                                                <img src={item.image} alt="rasm" className="row-image" />
+                                                : <div className="avatar_fallback">{getUserInitials(item)}</div>
+                                            }
+                                            <span>
+                                                <h5
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: highlightText(item.fish, searchText),
+                                                    }}></h5>
+                                            </span>
+                                        </td>
+                                        <td className="admin-td-description">{org_unvs?.find((e) => e.id === +item.university)?.name}</td>
+                                        <td className="admin-td-description">{org_faculs?.find((e) => e.id === +item.fakultet)?.name}</td>
+                                        <td className="admin-td-description">
+                                            {item.oquvyili}-kurs
+                                        </td>
+                                        <td>{item.ball}</td>
+
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="adm_stud_pagin">
+                        <button
+                            onClick={goToPrev}
+                            disabled={currentPage === 1}
+                            className="btn_outline"
+                            type="button"
+                        >
+
+                            <img src={left_pagin} alt="" />
+                            <span>Oldingi</span> 
+                        </button>
+                        <div>
+                            <span>{currentPage}/{totalPages}</span>
+
+                            {/* <span>10</span> */}
+                        </div>
+                        <button
+                            onClick={goToNext}
+                            disabled={currentPage === totalPages}
+                            className="btn_outline" type="button"
+                        >
+                            <span>Keyingi</span>
+                            <img src={right_pagin} alt="" />
+                        </button>
+                    </div>
+                </section>
+                :
+                <div className="stat_no_login">
+                    <h4>Iltimos Statistika sahifasini kuzatish uchun tizimdan ro'yhatdan o'ting</h4>
                 </div>
-            </div>
+            }
+        </div>
 
-            <div className="adm_news_head adm_stud_head">
-                <span>
-                    <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-                        <option value="barcha">Universitetlar(barcha)</option>
-                        {org_unvs?.map((item) => {
-                            return (
-                                <option key={item.id} value={item.id}>{item.name}</option>
-                            )
-                        })}
-                    </select>
-                    <select value={filterFacul} onChange={(e) => setFilterFacul(e.target.value)}>
-                        <option value="barcha">Fakultetlar(barcha)</option>
-                        {org_faculs?.map((item) => {
-                            return (
-                                <option key={item.id} value={item.id}>{item.name}</option>
-                            )
-                        })}
-                    </select>
-                    <select value={filterKurs} onChange={(e) => setFilterKurs(e.target.value)}>
-                        <option value="barcha">O‘quv yili(barcha)</option>
-                        <option value="1">1-kurs</option>
-                        <option value="2">2-kurs</option>
-                        <option value="3">3-kurs</option>
-                        <option value="4">4-kurs</option>
-                    </select>
-                </span>
-
-                <input type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder="Search by FISh" />
-            </div>
-            {/* Modal Body Table */}
-            <div className="extra_table_head">
-                <h3>Talabalar ro‘yxati</h3>
-                <span>{fullNumberSuds} foydalanuvchi</span>
-            </div>
-            <div className="table-wrapper">
-                <table className="admin-table">
-                    <thead>
-                        <tr>
-                            <th>T/R</th>
-                            <th>FIO</th>
-                            <th>OTM</th>
-                            <th>Fakultet</th>
-                            <th>O‘quv yili</th>
-                            <th>Ballar(Σ:{currentData?.reduce((sum, student) => sum + student.ball, 0)})</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentData?.map((item, index) => (
-                            <tr key={item.id}>
-                                <td>{index + 1}</td>
-                                <td className="stat_first_td">
-                                    {item.image ?
-                                        <img src={item.image} alt="rasm" className="row-image" />
-                                        : <div className="avatar_fallback">{getUserInitials(item)}</div>
-                                    }
-                                    <span>
-                                        <h5
-                                            dangerouslySetInnerHTML={{
-                                                __html: highlightText(item.fish, searchText),
-                                            }}></h5>
-                                    </span>
-                                </td>
-                                <td className="admin-td-description">{org_unvs?.find((e) => e.id === +item.university)?.name}</td>
-                                <td className="admin-td-description">{org_faculs?.find((e) => e.id === +item.fakultet)?.name}</td>
-                                <td className="admin-td-description">
-                                    {item.oquvyili}-kurs
-                                </td>
-                                <td>{item.ball}</td>
-
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            <div className="adm_stud_pagin">
-                <button
-                    onClick={goToPrev}
-                    disabled={currentPage === 1}
-                    className="btn_outline"
-                    type="button"
-                >
-
-                    <img src={left_pagin} alt="" />
-                    Oldingi
-                </button>
-                <div>
-                    <span>{currentPage}/{totalPages}</span>
-
-                    {/* <span>10</span> */}
-                </div>
-                <button
-                    onClick={goToNext}
-                    disabled={currentPage === totalPages}
-                    className="btn_outline" type="button"
-                >
-                    Keyingi
-                    <img src={right_pagin} alt="" />
-                </button>
-            </div>
-        </section>
     )
 }

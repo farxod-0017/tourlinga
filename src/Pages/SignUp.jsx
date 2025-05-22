@@ -130,6 +130,12 @@ export default function SignUp() {
         }
     }
 
+    const preventEnterSubmit = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+        }
+    };
+
     return (
         <section className="signup">
             <div ref={signupModal} className="signup_modal">
@@ -139,7 +145,7 @@ export default function SignUp() {
                     <Link to={"/login"}> <button type="button">Ok</button></Link>
                 </div>
             </div>
-            <form onSubmit={(e) => createDirection(e)}>
+            <form onKeyDown={(e) => preventEnterSubmit(e)}  onSubmit={(e) => createDirection(e)}>
                 <div id={box === 1 ? "open_signbox" : ""} className="sign_box1">
                     <img src={logo} alt="logo" />
                     <h2>Akkaunt ochish</h2>
@@ -205,9 +211,9 @@ export default function SignUp() {
                     <h5>Ma’lumotlaringizni kiriting.</h5>
 
                     <h4>Parol kiriting </h4>
-                    <input value={password} onChange={(e) => handlePasswordChange(e)} placeholder="password" type="number" />
+                    <input value={password} onChange={(e) => handlePasswordChange(e)} placeholder="password" type="password" />
                     <h4>Parol tastig‘i </h4>
-                    <input value={confirmPassword} onChange={(e) => handleConfirmPasswordChange(e)} placeholder="confirm password" type="number" />
+                    <input value={confirmPassword} onChange={(e) => handleConfirmPasswordChange(e)} placeholder="confirm password" type="password" />
                     <h6>Parol 8 sondan iborat bo‘lishi kerak</h6>
                     {
                         match ?

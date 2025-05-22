@@ -16,12 +16,14 @@
     opacity: 0;
     transition: 100ms;
 }
+
 #open_signbox {
     visibility: visible;
     opacity: 1;
     transition: 100ms;
     display: block;
 }
+
 .sign_box1 img {
     display: block;
     margin: 0 auto 24px;
@@ -74,7 +76,8 @@
     border-radius: 8px;
 }
 
-.sign_box1 input[type="text"], .sign_box1 input[type="number"] {
+.sign_box1 input[type="text"],
+.sign_box1 input[type="password"] {
     width: 100%;
     display: block;
     align-items: center;
@@ -183,6 +186,7 @@
     visibility: hidden;
     transition: 400ms;
 }
+
 .open_sign_modal {
     transform: translateY(0);
     visibility: visible;
@@ -224,3 +228,29 @@
     color: rgba(255, 255, 255, 1);
 }
 
+
+@media(max-width:700px) {
+    .sign_box1 {
+        padding: 36px 40px;
+    }
+}
+@media(max-width:500px) {
+    .sign_box3 input {
+        width: 100% !important;
+        min-width: calc(100vw - 32px)
+    }
+}
+@media(max-width:400px) {
+    .sign_box1 {
+        padding: 36px 0px 64px;
+        width: 100%;
+    }
+    .sign_box1 img {
+        display: none;
+    }
+    .sign_wrap {
+        flex-direction: column;
+        min-width: calc(100vw - 32px);
+    }
+    
+}

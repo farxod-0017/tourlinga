@@ -13,9 +13,9 @@ export default function Footer() {
                     <ul>
                         <li><Link to={"/"}>Bosh sahifa</Link></li>
                         <li><Link to={"/contact"}>Biz haqimizda</Link></li>
-                        <li><Link>Statistika</Link></li>
-                        <li><Link>Terminlar</Link></li>
-                        <li><Link>Savol-javob</Link></li>
+                        <li><Link to={'/statistics'}>Statistika</Link></li>
+                        <li><Link to={'/terms'}>Terminlar</Link></li>
+                        <li><Link to={'/questions'}>Savol-javob</Link></li>
                     </ul>
                 </div>
                 <hr className="foot_tablet_line"/>
@@ -28,7 +28,7 @@ export default function Footer() {
                 </div>
             </div>
             <hr />
-            <p>© 2025 DevoSoft agency. Barcha huquqlar himoyalangan.</p>
+            <p>© 2025 MADE IN <a target="_blank" href="https://t.me/devosoftuz">DEVOSOFT</a>. Barcha huquqlar himoyalangan.</p>
         </section>
     )
 }

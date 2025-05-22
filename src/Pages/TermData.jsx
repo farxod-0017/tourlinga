@@ -181,79 +181,89 @@ export default function TermData() {
     // global state END
 
     return (
-        <section className='terms'>
-            <div className="theme_bar">
-                <div className="theme_head">
-                    <ul>
-                        <li>Bosh sahifa </li>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none">
-                            <path
-                                d="M6.83 5.29001L2.59 1.05001C2.49704 0.956281 2.38644 0.881887 2.26458 0.831118C2.14272 0.780349 2.01202 0.754211 1.88 0.754211C1.74799 0.754211 1.61729 0.780349 1.49543 0.831118C1.37357 0.881887 1.26297 0.956281 1.17 1.05001C0.983753 1.23737 0.879211 1.49082 0.879211 1.75501C0.879211 2.0192 0.983753 2.27265 1.17 2.46001L4.71 6.00001L1.17 9.54001C0.983753 9.72737 0.879211 9.98082 0.879211 10.245C0.879211 10.5092 0.983753 10.7626 1.17 10.95C1.26344 11.0427 1.37426 11.116 1.4961 11.1658C1.61793 11.2155 1.7484 11.2408 1.88 11.24C2.01161 11.2408 2.14207 11.2155 2.26391 11.1658C2.38575 11.116 2.49656 11.0427 2.59 10.95L6.83 6.71001C6.92373 6.61705 6.99813 6.50645 7.04889 6.38459C7.09966 6.26273 7.1258 6.13202 7.1258 6.00001C7.1258 5.868 7.09966 5.73729 7.04889 5.61543C6.99813 5.49357 6.92373 5.38297 6.83 5.29001Z"
-                                fill="#717680"
-                            />
-                        </svg>
-                        <li>Terminlar</li>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none">
-                            <path
-                                d="M6.83 5.29001L2.59 1.05001C2.49704 0.956281 2.38644 0.881887 2.26458 0.831118C2.14272 0.780349 2.01202 0.754211 1.88 0.754211C1.74799 0.754211 1.61729 0.780349 1.49543 0.831118C1.37357 0.881887 1.26297 0.956281 1.17 1.05001C0.983753 1.23737 0.879211 1.49082 0.879211 1.75501C0.879211 2.0192 0.983753 2.27265 1.17 2.46001L4.71 6.00001L1.17 9.54001C0.983753 9.72737 0.879211 9.98082 0.879211 10.245C0.879211 10.5092 0.983753 10.7626 1.17 10.95C1.26344 11.0427 1.37426 11.116 1.4961 11.1658C1.61793 11.2155 1.7484 11.2408 1.88 11.24C2.01161 11.2408 2.14207 11.2155 2.26391 11.1658C2.38575 11.116 2.49656 11.0427 2.59 10.95L6.83 6.71001C6.92373 6.61705 6.99813 6.50645 7.04889 6.38459C7.09966 6.26273 7.1258 6.13202 7.1258 6.00001C7.1258 5.868 7.09966 5.73729 7.04889 5.61543C6.99813 5.49357 6.92373 5.38297 6.83 5.29001Z"
-                                fill="#717680"
-                            />
-                        </svg>
-                        <li>{selectedTmId ? direcs?.find((item) => item.id === selectedTmId).name : "Barchasi"}</li>
-                    </ul>
-                    <h1>Terminlar</h1>
+        <div>
+            {sessionStorage.getItem('userId') ?
+
+                <section className='terms'>
+                    <div className="theme_bar">
+                        <div className="theme_head">
+                            <ul>
+                                <li>Bosh sahifa </li>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none">
+                                    <path
+                                        d="M6.83 5.29001L2.59 1.05001C2.49704 0.956281 2.38644 0.881887 2.26458 0.831118C2.14272 0.780349 2.01202 0.754211 1.88 0.754211C1.74799 0.754211 1.61729 0.780349 1.49543 0.831118C1.37357 0.881887 1.26297 0.956281 1.17 1.05001C0.983753 1.23737 0.879211 1.49082 0.879211 1.75501C0.879211 2.0192 0.983753 2.27265 1.17 2.46001L4.71 6.00001L1.17 9.54001C0.983753 9.72737 0.879211 9.98082 0.879211 10.245C0.879211 10.5092 0.983753 10.7626 1.17 10.95C1.26344 11.0427 1.37426 11.116 1.4961 11.1658C1.61793 11.2155 1.7484 11.2408 1.88 11.24C2.01161 11.2408 2.14207 11.2155 2.26391 11.1658C2.38575 11.116 2.49656 11.0427 2.59 10.95L6.83 6.71001C6.92373 6.61705 6.99813 6.50645 7.04889 6.38459C7.09966 6.26273 7.1258 6.13202 7.1258 6.00001C7.1258 5.868 7.09966 5.73729 7.04889 5.61543C6.99813 5.49357 6.92373 5.38297 6.83 5.29001Z"
+                                        fill="#717680"
+                                    />
+                                </svg>
+                                <li>Terminlar</li>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none">
+                                    <path
+                                        d="M6.83 5.29001L2.59 1.05001C2.49704 0.956281 2.38644 0.881887 2.26458 0.831118C2.14272 0.780349 2.01202 0.754211 1.88 0.754211C1.74799 0.754211 1.61729 0.780349 1.49543 0.831118C1.37357 0.881887 1.26297 0.956281 1.17 1.05001C0.983753 1.23737 0.879211 1.49082 0.879211 1.75501C0.879211 2.0192 0.983753 2.27265 1.17 2.46001L4.71 6.00001L1.17 9.54001C0.983753 9.72737 0.879211 9.98082 0.879211 10.245C0.879211 10.5092 0.983753 10.7626 1.17 10.95C1.26344 11.0427 1.37426 11.116 1.4961 11.1658C1.61793 11.2155 1.7484 11.2408 1.88 11.24C2.01161 11.2408 2.14207 11.2155 2.26391 11.1658C2.38575 11.116 2.49656 11.0427 2.59 10.95L6.83 6.71001C6.92373 6.61705 6.99813 6.50645 7.04889 6.38459C7.09966 6.26273 7.1258 6.13202 7.1258 6.00001C7.1258 5.868 7.09966 5.73729 7.04889 5.61543C6.99813 5.49357 6.92373 5.38297 6.83 5.29001Z"
+                                        fill="#717680"
+                                    />
+                                </svg>
+                                <li>{selectedTmId ? direcs?.find((item) => item.id === selectedTmId).name : "Barchasi"}</li>
+                            </ul>
+                            <h1>Terminlar</h1>
+                        </div>
+                        <div className="theme_body">
+                            <input type="text" placeholder='Qidirish' />
+                            <ul>
+                                {direcs?.map((item) => {
+                                    return (
+                                        <li className={item.id === selectedTmId ? "selectedTheme" : ""} onClick={(e) => setSelectedTmId(item.id)} key={item.id}>{item.name}</li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="terms_body">
+                        <h2>{selectedTmId ? direcs?.find((item) => item.id === selectedTmId).name : "Barchasi"}</h2>
+                        <div className="terms_body_head">
+                            <nav>
+                                <NavLink to={"/terms"}>Terminlar</NavLink>
+                                <NavLink to={"/questions"}>Savol-Javob</NavLink>
+                            </nav>
+                            <h4>To‘plangan ballar: <span>{info?.ball ? info?.ball : "0"}</span></h4>
+                        </div>
+                        <div className="terms_grid">
+                            {terms?.length === 0 ?
+                                <h6>Bu mavzu uchun Terminlar yuklanmagan</h6> :
+                                <noscript></noscript>
+                            }
+                            {terms?.map((item) => {
+                                return (
+                                    <div key={item.id} className="terms_wrap">
+                                        <div className="terms_box">
+                                            <h5>Ingliz</h5>
+                                            <h3>{item.engw}</h3>
+                                            <p>{item.engwt}</p>
+                                            <a href={item.link} target="_blank" rel="noopener noreferrer">
+                                                {item.link}
+                                            </a>
+                                            <img src={item.image} alt="image of word" />
+                                        </div>
+                                        <div className="terms_box">
+                                            <h5>O‘zbek</h5>
+                                            <h3>{item.uzbw}</h3>
+                                            <p>{item.uzbwt}</p>
+                                            <a href={item.link} target="_blank" rel="noopener noreferrer">
+                                                {item.link}
+                                            </a>
+                                            <img src={item.image} alt="image of word" />
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+                </section>
+                :
+                <div className="stat_no_login">
+                    <h4>Iltimos Terminlar sahifasini kuzatish uchun tizimdan ro'yhatdan o'ting</h4>
                 </div>
-                <div className="theme_body">
-                    <input type="text" placeholder='Qidirish' />
-                    <ul>
-                        {direcs?.map((item) => {
-                            return (
-                                <li className={item.id === selectedTmId ? "selectedTheme" : ""} onClick={(e) => setSelectedTmId(item.id)} key={item.id}>{item.name}</li>
-                            )
-                        })}
-                    </ul>
-                </div>
-            </div>
-            <div className="terms_body">
-                <h2>{selectedTmId ? direcs?.find((item) => item.id === selectedTmId).name : "Barchasi"}</h2>
-                <div className="terms_body_head">
-                    <nav>
-                        <NavLink to={"/terms"}>Terminlar</NavLink>
-                        <NavLink to={"/questions"}>Savol-Javob</NavLink>
-                    </nav>
-                    <h4>To‘plangan ballar: <span>{info?.ball ? info?.ball : "0"}</span></h4>
-                </div>
-                <div className="terms_grid">
-                    {terms?.length === 0 ?
-                        <h6>Bu mavzu uchun Terminlar yuklanmagan</h6> :
-                        <noscript></noscript>
-                    }
-                    {terms?.map((item) => {
-                        return (
-                            <div key={item.id} className="terms_wrap">
-                                <div className="terms_box">
-                                    <h5>Ingliz</h5>
-                                    <h3>{item.engw}</h3>
-                                    <p>{item.engwt}</p>
-                                    <a href={item.link} target="_blank" rel="noopener noreferrer">
-                                        {item.link}
-                                    </a>
-                                    <img src={item.image} alt="image of word" />
-                                </div>
-                                <div className="terms_box">
-                                    <h5>O‘zbek</h5>
-                                    <h3>{item.uzbw}</h3>
-                                    <p>{item.uzbwt}</p>
-                                    <a href={item.link} target="_blank" rel="noopener noreferrer">
-                                        {item.link}
-                                    </a>
-                                    <img src={item.image} alt="image of word" />
-                                </div>
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
-        </section>
+            }
+        </div>
+
     )
 }

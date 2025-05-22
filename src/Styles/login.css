@@ -116,3 +116,35 @@
     color: rgba(4, 78, 252, 1);
     font-weight: 600;
 }
+
+@media(max-width:600px) {
+    .login {
+        padding: 82px;
+    }
+
+    .login_box {
+        padding: 54px 36px;
+    }
+}
+
+@media(max-width:500px) {
+    .login {
+        padding: 72px 0 0;
+    }
+}
+
+@media(max-width:400px) {
+    .login_box {
+        padding: 64px 16px;
+    }
+
+    .login_box img {
+        display: none;
+    }
+
+    .login_box p {
+        font-size: 14px;
+        line-height: 20px;
+        margin: 4px 0 48px;
+    }
+}

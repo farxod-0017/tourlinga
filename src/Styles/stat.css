@@ -47,6 +47,10 @@
 .avatar_fallback {
     width: 40px;
     height: 40px;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
     border-radius: 50%;
     background: #E6EDFF;
     font-weight: 500;
@@ -71,4 +75,104 @@
     font-size: 14px;
     line-height: 20px;
     color: #535862;
+}
+
+.stat_no_login {
+    min-height: calc(100vh);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat_no_login h4 {
+    color: #181D27;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 60px;
+    text-align: center;
+}
+
+.full_stat {
+    padding: 0 16px;
+}
+
+/* Response */
+
+@media(max-width:1400px) {
+    .user_stat {
+        padding: 46px 55px;
+    }
+}
+
+@media(max-width:1220px) {
+    .stat_box {
+        min-width: 228px;
+    }
+
+    .adm_stud_head span select {
+        width: 100%;
+    }
+
+    .adm_stud_head input {
+        max-width: 220px;
+    }
+}
+
+@media(max-width:800px) {
+    .user_stat {
+        padding: 36px 35px;
+        margin: 100px auto 64px;
+    }
+
+    .adm_stud_head {
+        flex-direction: column-reverse;
+        align-items: start;
+        gap: 12px;
+    }
+
+    .adm_stud_head input {
+        max-width: 320px;
+    }
+}
+
+@media(max-width:600px) {
+    .user_stat {
+        background-color: white;
+    }
+
+    .adm_stud_title {
+        font-size: 36px;
+        line-height: 44px;
+        margin-bottom: 48px;
+    }
+    .adm_home h1, .adm_home h3 {
+        display: none;
+    }
+    .user_stat {
+        padding: 36px 16px;
+    }
+    .stat_box {
+        width: 100%;
+    }
+}
+@media(max-width:500px) {
+    .full_stat {
+        padding: 0;
+    }
+    .adm_stud_head span {
+        flex-wrap: wrap;
+    }
+    .adm_stud_head span select {
+        min-width: 133px;
+        max-width: 170px;
+    }
+    .adm_stud_head input {
+        max-width: 420px;
+    }
+    .adm_stud_pagin button span {
+        display: none;
+    }
+    .extra_table_head h3 {
+        line-height: 22px;
+    }
 }

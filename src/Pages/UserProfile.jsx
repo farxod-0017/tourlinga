@@ -1,7 +1,6 @@
 import '../Styles/userPrf.css'
 import { useCallback, useEffect, useReducer, useState } from "react"
 
-import { useRef } from "react";
 import { mURL } from "../mURL"
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';

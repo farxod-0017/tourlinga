@@ -193,7 +193,7 @@ export default function AdminQuestions() {
         if (timeDiff < 900) {
             try {
                 setIsLoading(true);
-                let fetchData = await fetch(`${mURL}/main/savollar/`, {
+                let fetchData = await fetch(`${mURL}/main/admin/savollar/`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${takeOriginalValue('access_token')}`,
@@ -262,7 +262,7 @@ export default function AdminQuestions() {
         const timeDiff = (current_time - new Date(stored_time)) / 60000;
         if (timeDiff < 900) {
             try {
-                let fetchData = await fetch(`${mURL}/main/savollar`, {
+                let fetchData = await fetch(`${mURL}/main/admin/savollar`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${takeOriginalValue('access_token')}`
@@ -355,7 +355,7 @@ export default function AdminQuestions() {
         if (timeDiff < 900) {
             try {
                 setIsLoading(true);
-                let fetchData = await fetch(`${mURL}/main/savollar/${updingId}/`, {
+                let fetchData = await fetch(`${mURL}/main/admin/savollar/${updingId}/`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${takeOriginalValue('access_token')}`,
@@ -436,7 +436,7 @@ export default function AdminQuestions() {
         if (timeDiff < 900) {
             try {
                 setIsLoading(true);
-                let fetchData = await fetch(`${mURL}/main/savollar/${deltingId}/`, {
+                let fetchData = await fetch(`${mURL}/main/admin/savollar/${deltingId}/`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${takeOriginalValue('access_token')}`

@@ -215,3 +215,120 @@
 .terms_box img {
     width: 100%;
 }
+
+
+.term_search_wrap input {
+    border-top-right-radius: 0px;
+    outline: none;
+    color: black;
+}
+
+.term_search_wrap input:focus {
+    border: 2px solid rgba(4, 78, 252, 1);
+}
+
+.term_search_wrap div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.term_search_wrap span {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
+    color: #414651;
+    padding: 4px 6px;
+    border: 1px solid rgba(213, 215, 218, 1);
+    border-bottom: none;
+    cursor: pointer;
+}
+
+.term_search_wrap span:nth-of-type(1) {
+    border-top-left-radius: 8px;
+
+}
+
+.term_search_wrap span:nth-of-type(2) {
+    border-top-right-radius: 8px;
+}
+
+.term_loading_btn {
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 32px;
+    cursor: unset;
+}
+
+.no_upload_message {
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 32px;
+    cursor: unset;
+    border: none;
+    background-color: #FEC84B;
+}
+
+.no_search_result_message {
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 32px;
+    cursor: unset;
+    border: none;
+    color: #D92D20;
+    background-color: #FDA29B;
+}
+
+@media(max-width:1400px) {
+    .theme_bar {
+        width: 290px;
+        padding: 0 32px 32px 32px;
+    }
+
+    .terms {
+        padding: 96px 22px 22px 290px;
+    }
+
+    .terms_wrap {
+        display: grid;
+        grid-template-columns: 48% 48%;
+    }
+}
+
+@media(max-width:1000px) {
+    .theme_bar {
+        padding: 0 16px 16px 32px;
+        width: 240px;
+    }
+
+    .terms {
+        padding: 96px 12px 12px 240px;
+    }
+
+    .theme_head ul li {
+        font-size: 14px;
+    }
+
+    .theme_head ul {
+        gap: 6px;
+    }
+
+    .terms_body h2 {
+        font-size: 36px;
+        line-height: 44px;
+    }
+
+    .terms_box h3 {
+        font-size: 20px;
+        line-height: 30px;
+    }
+    
+}
+@media(max-width:768px) {
+    .terms_wrap {
+        grid-template-columns: 99%;
+    }
+}

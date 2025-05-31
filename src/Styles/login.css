@@ -45,7 +45,8 @@
     margin-bottom: 6px;
 }
 
-.login_box input[type="text"], .login_box input[type="password"] {
+.login_box input[type="text"],
+.login_box input[type="password"] {
     border: 1px solid rgba(213, 215, 218, 1);
     box-shadow: 0px 1px 2px 0px rgba(10, 13, 18, 0.05);
     height: 44px;
@@ -53,6 +54,13 @@
     border-radius: 8px;
     padding: 10px 14px;
     margin-bottom: 20px;
+    outline: none;
+}
+
+.login_box input[type="text"]:focus,
+.login_box input[type="password"]:focus {
+    border: 2px solid #044EFC;
+
 }
 
 .login_box input::placeholder {
@@ -112,6 +120,7 @@
     color: rgba(83, 88, 98, 1);
     text-align: center;
 }
+
 .login_box h4 a {
     color: rgba(4, 78, 252, 1);
     font-weight: 600;

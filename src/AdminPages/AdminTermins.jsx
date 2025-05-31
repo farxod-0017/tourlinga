@@ -550,24 +550,26 @@ export default function AdminTermins() {
                     <h1>Terminlar nomi</h1>
                     <div className="termin_name_wrap">
                         <div>
-                            <h4>O‘zbek tilida</h4>
-                            <textarea value={direction_name} onChange={(e) => setDirectionName(e.target.value)} placeholder="Termin kiriting..."></textarea>
-                        </div>
-                        <div>
                             <h4>Ingliz tilida</h4>
                             <textarea value={direction_name_eng} onChange={(e) => setDirectionNameEng(e.target.value)} placeholder="Termin kiriting..."></textarea>
                         </div>
+                        <div>
+                            <h4>O‘zbek tilida</h4>
+                            <textarea value={direction_name} onChange={(e) => setDirectionName(e.target.value)} placeholder="Termin kiriting..."></textarea>
+                        </div>
+
                     </div>
                     <h1>Terminlar tavsifi</h1>
                     <div className="termin_tavsif_wrap">
                         <div>
-                            <h4>O‘zbek tilida</h4>
-                            <textarea value={news_tavsif} onChange={(e) => setNews_tavsif(e.target.value)} className="tavsif_text" placeholder="Tavsif kiriting..."></textarea>
-                        </div>
-                        <div>
                             <h4>Ingliz tilida</h4>
                             <textarea value={news_tavsif_eng} onChange={(e) => setNews_tavsif_eng(e.target.value)} className="tavsif_text" placeholder="Tavsif kiriting..."></textarea>
                         </div>
+                        <div>
+                            <h4>O‘zbek tilida</h4>
+                            <textarea value={news_tavsif} onChange={(e) => setNews_tavsif(e.target.value)} className="tavsif_text" placeholder="Tavsif kiriting..."></textarea>
+                        </div>
+
                     </div>
                     <div className="termin_url_mavzu">
                         <span>
@@ -689,7 +691,11 @@ export default function AdminTermins() {
                                 <td>{item.uzbw}/{item.engw}</td>
                                 <td className="admin-td-description">{item.uzbwt} <br /> {item.engwt}</td>
                                 <td>
+                                    {item.image ? 
                                     <img src={item.image} alt="rasm" className="row-image" />
+                                    :
+                                    "rasm yuklanmagan"
+                                }
                                 </td>
                                 <td>{org_unvs?.find((t) => t.id === +item.mavzu_id)?.name}</td>
                                 <td>

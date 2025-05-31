@@ -68,7 +68,7 @@ body {
 
 .Loading {
     background-color: transparent !important;
-    border: 2px solid #049906 !important;
+    border: 2px solid #3C53D4 !important;
     color: #049906;
     font-weight: 600;
     display: flex !important;
@@ -81,11 +81,12 @@ body {
     content: "";
     width: 18px;
     height: 18px;
-    border: 3px solid black;
+    border: 3px solid #6D7EDF;
+    border-left-color:  #3C53D4;
+    border-bottom-color: #6172F3;
     border-top-color: transparent;
     border-radius: 50%;
     animation: spin 0.4s linear infinite;
-    margin-left: 10px;
 }
 
 .highlight {
@@ -94,6 +95,9 @@ body {
     /* Engil sariq */
     padding: 0 2px;
     border-radius: 2px
+}
+.inline_tag {
+    display: inline;
 }
 
 /* Animatsiya qoidalari */

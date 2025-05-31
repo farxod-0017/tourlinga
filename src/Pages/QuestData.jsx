@@ -11,8 +11,11 @@ import CryptoJS from 'crypto-js';
 import checked_inp from '../Images/checked_inp.svg'
 import success_icon from "../Images/success_icon.svg"
 import { useDirecs } from '../context/DirecsContext';
+import AuthRequired from '../components/AuthRequired';
 
 export default function QuestData() {
+
+    const [searchType, setSearchType] = useState(true)
 
     // universal blocks
     const [isLoading, setIsLoading] = useState(false);
@@ -39,6 +42,7 @@ export default function QuestData() {
 
     // get Themes
     const [direcs, setDirecs] = useState([]);
+    const [orgDirecs, setOrgDirecs] = useState([]);
     const getDirecs = useCallback(async () => {
         const current_time = new Date();
         const stored_time = takeOriginalValue('stored_time');
@@ -54,6 +58,7 @@ export default function QuestData() {
                 if (fetchData.ok) {
                     let data = await fetchData.json();
                     setDirecs(data);
+                    setOrgDirecs(data)
                     let first_id = data[0]?.id
                     setSelectedTmId(first_id);
                     console.log(data);
@@ -109,6 +114,7 @@ export default function QuestData() {
 
     // get news
     const [terms, setTerms] = useState([]);
+    const [orgTerms, setOrgTerms] = useState([])
     const getTerms = useCallback(async () => {
         const current_time = new Date();
         const stored_time = takeOriginalValue('stored_time');
@@ -117,6 +123,7 @@ export default function QuestData() {
         if (selectedTmId) {
             if (timeDiff < 900) {
                 try {
+                    setIsLoading(true)
                     let fetchData = await fetch(`${mURL}/main/savollar-by-mavzu/${selectedTmId}/`, {
                         method: 'GET',
                         headers: {
@@ -126,6 +133,7 @@ export default function QuestData() {
                     if (fetchData.ok) {
                         let data = await fetchData.json();
                         setTerms(data)
+                        setOrgTerms(data)
                         console.log(data);
                     } else if (fetchData.status === 401) {
                         console.log('Token tekshirilmoqda...');
@@ -136,6 +144,8 @@ export default function QuestData() {
                     }
                 } catch (error) {
                     console.log(`get Directionsda xatolik:, error`);
+                } finally {
+                    setIsLoading(false)
                 }
             } else {
                 // Token muddati tugagan, refresh orqali yangi token olish
@@ -177,6 +187,55 @@ export default function QuestData() {
     }, [ignore, getTerms]);
 
     // END get news
+
+    // Filtrlash funksiyasi
+    const [searchText, setSearchText] = useState('')
+    const filterPatients = useCallback(() => {
+        if (searchType) {
+            let result = [...orgDirecs];
+
+            // Ism bo'yicha filtrlash
+            if (searchText) {
+                result = result.filter((patient) =>
+                    patient.name.toLowerCase().includes(searchText.toLowerCase())
+                );
+            }
+            // Filterlangan ro'yxatni faqat o'zgargan holatda yangilash
+            if (JSON.stringify(result) !== JSON.stringify(direcs)) {
+                setDirecs(result);
+            }
+        } else {
+            let result = [...orgTerms];
+
+            // Ism bo'yicha filtrlash
+            if (searchText) {
+                result = result.filter((patient) =>
+                    patient.title.toLowerCase().includes(searchText.toLowerCase())
+                );
+            }
+            // Filterlangan ro'yxatni faqat o'zgargan holatda yangilash
+            if (JSON.stringify(result) !== JSON.stringify(terms)) {
+                setTerms(result);
+            }
+        }
+
+    }, [direcs, orgDirecs, searchText, terms, orgTerms]);
+
+    // "va" qizil rangga kirish funksiyasi
+    const highlightText = (text, search) => {
+        if (!text || !search) return text;
+        const regex = new RegExp(`(${search})`, "gi");
+        if (searchType) {
+            return text.toString().replace(regex, `<span class="highlight inline_tag">$1</span>`);
+        } else {
+            return text.toString().replace(regex, `<h5 class="highlight inline_tag">$1</h5>`);
+        }
+    };
+    useEffect(() => {
+        filterPatients();
+    }, [filterPatients]);
+    // Filters For Full Visits END
+
 
     const [answers, setAnswers] = useState([]);
 
@@ -340,23 +399,38 @@ export default function QuestData() {
                                         fill="#717680"
                                     />
                                 </svg>
-                                <li>{selectedTmId ? direcs?.find((item) => item.id === selectedTmId).name : "Barchasi"}</li>
+                                <li>{selectedTmId ? orgDirecs?.find((item) => item.id === selectedTmId).name : "Barchasi"}</li>
                             </ul>
                             <h1>Savol-Javob</h1>
                         </div>
                         <div className="theme_body">
-                            <input type="text" placeholder='Qidirish' />
+                            <div className="term_search_wrap">
+                                <div>
+                                    <span className={searchType ? "selectedTheme" : ""} onClick={() => setSearchType(true)}>Mavzu</span>
+                                    <span className={!searchType ? "selectedTheme" : ""} onClick={() => setSearchType(false)}>Savol</span>
+                                </div>
+                                <input value={searchText} onChange={(e) => setSearchText(e.target.value)} type="text" placeholder='Qidirish' />
+                            </div>
                             <ul>
                                 {direcs?.map((item) => {
                                     return (
-                                        <li className={item.id === selectedTmId ? "selectedTheme" : ""} onClick={(e) => setSelectedTmId(item.id)} key={item.id}>{item.name}</li>
+                                        <li
+                                            className={item.id === selectedTmId ? "selectedTheme" : ""}
+                                            onClick={(e) => setSelectedTmId(item.id)}
+                                            key={item.id}
+                                            dangerouslySetInnerHTML={{
+                                                __html: searchType ? highlightText(item.name, searchText) : item.name,
+                                            }}
+                                        >
+
+                                        </li>
                                     )
                                 })}
                             </ul>
                         </div>
                     </div>
                     <div className="terms_body">
-                        <h2>{selectedTmId ? direcs?.find((item) => item.id === selectedTmId).name : "Barchasi"}</h2>
+                        <h2>{selectedTmId ? orgDirecs?.find((item) => item.id === selectedTmId).name : "Barchasi"}</h2>
                         <div className="terms_body_head">
                             <nav>
                                 <NavLink to={"/terms"}>Terminlar</NavLink>
@@ -367,15 +441,24 @@ export default function QuestData() {
                         {
                             checked ?
                                 <div className="terms_grid quest_grid">
-                                    {merged?.length === 0 ?
-                                        <h6>Bu mavzu uchun Savollar bajarilmadi</h6> :
-                                        <noscript></noscript>
+                                    {isLoading ?
+                                        <button type="button" className='btn_primary loadingB term_loading_btn'>Yuklanmoqda ...</button> :
+                                        !isLoading && !searchType && searchText === "" && terms?.length === 0 ?
+                                            <button type="button" className='no_upload_message'>Bu mavzu uchun Savollar bajarilmagan</button>
+                                            : !isLoading && searchText !== "" && !searchType && terms?.length === 0 ?
+                                                <button type="button" className='no_search_result_message'>Qidiruv natijalari topilmadi</button> :
+                                                <noscript></noscript>
                                     }
                                     {merged?.map((q, index) => {
                                         return (
                                             <div key={q.id} className='result_box'>
                                                 <h4>{index + 1}. Savol</h4>
-                                                <h5>{q.title} </h5>
+                                                <h5
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: !searchType ? highlightText(q.title, searchText) : q.title,
+                                                    }}
+                                                >
+                                                </h5>
                                                 {["A", "B", "C"].map((opt, index) => {
                                                     return (
                                                         <div key={index}>
@@ -435,14 +518,22 @@ export default function QuestData() {
                                 :
 
                                 <div className="terms_grid quest_grid">
-                                    {terms?.length === 0 ?
-                                        <h6>Bu mavzu uchun Savollar yuklanmagan</h6> :
-                                        <noscript></noscript>
+                                    {isLoading ?
+                                        <button type="button" className='btn_primary loadingB term_loading_btn'>Yuklanmoqda ...</button> :
+                                        !isLoading && !searchType && searchText === "" && terms?.length === 0 ?
+                                            <button type="button" className='no_upload_message'>Bu mavzu uchun Savollar yuklanmagan</button>
+                                            : !isLoading && searchText !== "" && !searchType && terms?.length === 0 ?
+                                                <button type="button" className='no_search_result_message'>Qidiruv natijalari topilmadi</button> :
+                                                <noscript></noscript>
                                     }
                                     {terms?.map((q, index) => (
                                         <div key={q.id} className='quest_box'>
                                             <h4>{index + 1}. Savol</h4>
-                                            <h5>{q.title} </h5>
+                                            <h5
+                                                dangerouslySetInnerHTML={{
+                                                    __html: !searchType ? highlightText(q.title, searchText) : q.title,
+                                                }}
+                                            ></h5>
                                             {["A", "B", "C"].map(opt => (
                                                 <label key={opt} className={`custom-label ${answers.find(a => a.id === q.id)?.answer === opt ? "selected_anw" : ""
                                                     }`}>
@@ -462,9 +553,11 @@ export default function QuestData() {
                                         </div>
                                     ))}
                                     <hr />
-                                    <button className='finish_quest btn_primary' id={answers.length !== terms.length ? "finish_btn_disabled" : ""} onClick={(e) => handleSubmit(e)} disabled={answers.length !== terms.length}>
-                                        Testni yakunlash
-                                    </button>
+                                    { orgTerms?.length !== 0 &&
+                                        <button className='finish_quest btn_primary' id={answers.length !== orgTerms.length ? "finish_btn_disabled" : ""} onClick={(e) => handleSubmit(e)} disabled={answers.length !== orgTerms.length}>
+                                            Testni yakunlash
+                                        </button>
+                                    }
                                 </div>
                         }
 
@@ -472,9 +565,7 @@ export default function QuestData() {
                     </div>
                 </section>
                 :
-                <div className="stat_no_login">
-                    <h4>Iltimos Savol-Javob sahifasini kuzatish uchun tizimdan ro'yhatdan o'ting</h4>
-                </div>
+                <AuthRequired pageName={"Savol-Javob"} />
             }
 
         </div>

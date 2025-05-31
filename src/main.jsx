@@ -24,6 +24,7 @@ import QuestData from './Pages/QuestData.jsx'
 import UserProfile from './Pages/UserProfile.jsx'
 import AdminStatistics from './AdminPages/AdminStatistics.jsx'
 import Statistics from './Pages/Statistics.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -39,7 +40,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='/profile' element={<UserProfile />} />
           <Route path='/statistics' element={<Statistics />} />
         </Route>
-        <Route path='/admin' element={<Admin />}>
+        {/* <Route path='/admin' element={<Admin />}>
           <Route path='/admin' element={<AdminHome />} />
           <Route path='/admin/news' element={<AdminNews />} />
           <Route path='/admin/universities' element={<AdminUnvs />} />
@@ -49,6 +50,19 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='/admin/terms' element={<AdminTermins />} />
           <Route path='/admin/questions' element={<AdminQuestions />} />
           <Route path='/admin/students' element={<AdminStatistics />} />
+        </Route> */}
+        <Route path='/admin' element={<ProtectedRoute />}>
+          <Route path='' element={<Admin />}>
+            <Route index element={<AdminHome />} />
+            <Route path='news' element={<AdminNews />} />
+            <Route path='universities' element={<AdminUnvs />} />
+            <Route path='faculties' element={<AdminFaculty />} />
+            <Route path='profile' element={<AdminProfile />} />
+            <Route path='themes' element={<AdminThemes />} />
+            <Route path='terms' element={<AdminTermins />} />
+            <Route path='questions' element={<AdminQuestions />} />
+            <Route path='students' element={<AdminStatistics />} />
+          </Route>
         </Route>
         <Route path='*' element={<ErrorPage />} />
       </Routes>

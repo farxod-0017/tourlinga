@@ -1,16 +1,20 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
+import Cookies from 'js-cookie';
+
 import "../AdminCSS/admBar.css"
 
 import acc_icon from "../Images/account-icon.png"
 import log_out_icon from "../Images/log_out_icon.svg"
 
-export default function AdminBar({info}) {
+export default function AdminBar({ info }) {
 
     let location = useLocation();
     let path = location.pathname
 
     function logOut(e) {
         sessionStorage.clear('userId');
+        Cookies.remove("access_token");
+        Cookies.remove('refresh_token')
         window.location.href = ('/login')
     }
     return (
@@ -187,7 +191,7 @@ export default function AdminBar({info}) {
                             <h6>{info?.email}</h6>
                         </div>
                     </div>
-                    <button onClick={(e)=>logOut(e)} type="button" className='logout-btn'>
+                    <button onClick={(e) => logOut(e)} type="button" className='logout-btn'>
                         <img className='mob_log_out_icon' src={log_out_icon} alt="log-out icon" />
                     </button>
                 </div>

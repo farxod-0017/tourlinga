@@ -8,7 +8,9 @@ import burger_icon from "../Images/burger.svg"
 import search_icon from "../Images/search_icon.svg"
 import close_icon from "../Images/close_icon.svg"
 
-import { useRef, useState } from 'react'
+import { useRef, useState } from 'react';
+import Cookies from 'js-cookie';
+
 
 export default function Header({ info }) {
     const mobileModal = useRef();
@@ -28,6 +30,8 @@ export default function Header({ info }) {
 
     function logOut(e) {
         sessionStorage.clear('userId');
+        Cookies.remove('access_token');
+        Cookies.remove('refresh_token')
         window.location.href = ('/login')
     }
 
@@ -96,8 +100,8 @@ export default function Header({ info }) {
                     <div className="head_right">
                         <select>
                             <option value="1">UZ</option>
-                            <option value="2">RU</option>
-                            <option value="3">ENG</option>
+                            <option disabled value="2">RU</option>
+                            <option disabled value="3">ENG</option>
                         </select>
                         {isLogin ? (
                             <div className="head_account head_unv">
@@ -130,7 +134,7 @@ export default function Header({ info }) {
                             <div className="head_login head_unv">
                                 <Link to={"/login"}><h4>Tizimga kirish</h4></Link>
                                 <Link to={"/sign-up"}>
-                                    <button className='login_desktop' type="button">Ro‘yxatdan o‘tish</button>
+                                    <button className='login_desktop btn_primary' type="button">Ro‘yxatdan o‘tish</button>
                                 </Link>
                                 <div className="hover_icon">
                                     <svg

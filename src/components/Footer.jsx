@@ -19,13 +19,13 @@ export default function Footer() {
                     </ul>
                 </div>
                 <hr className="foot_tablet_line"/>
-                <div className="foot_tright">
+                {/* <div className="foot_tright">
                     <h5>Yangiliklardan xabardor bo‘lib turing</h5>
                     <div className="foot_email">
                         <input placeholder="E-mail kiriting" type="email" />
                         <button type="button">Obuna boʻlish</button>
                     </div>
-                </div>
+                </div> */}
             </div>
             <hr />
             <p>© 2025 MADE IN <a target="_blank" href="https://t.me/devosoftuz">DEVOSOFT</a>. Barcha huquqlar himoyalangan.</p>

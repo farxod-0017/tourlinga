@@ -11,8 +11,21 @@ import CryptoJS from 'crypto-js';
 import { toast, ToastContainer } from 'react-toastify';
 
 export default function () {
-    function navigateToRole(role) {
-        navigate(role === 'student' ? '/profile' : role === 'Admin' ? '/admin'  : '/login');
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+    const secret_key = import.meta.env.VITE_SECRET_KEY;
+    const saveEncryptedCookie = (key, value) => {
+        let encrypted_value = CryptoJS.AES.encrypt(value, secret_key).toString();
+        Cookies.set(key, encrypted_value);
+    }
+    function navigateToRole(role, message) {
+        if (role === "student") {
+            navigate('/profile', { state: { toastMessage: message } })
+        } else if (role === "Admin") {
+            saveEncryptedCookie('user_role', "Admin")
+            navigate('/admin', { state: { toastMessage: message } })
+        }
+        // navigate(role === 'student' ? '/profile' : role === 'Admin' ? '/admin' : '/login');
         // setTimeout(() => {
         //     window.location.reload();
         // }, 1000);
@@ -26,14 +39,7 @@ export default function () {
         }
 
     }
-    const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
-    const secret_key = import.meta.env.VITE_SECRET_KEY;
-    
-    const saveEncryptedCookie = (key, value) => {
-        let encrypted_value = CryptoJS.AES.encrypt(value, secret_key).toString();
-        Cookies.set(key, encrypted_value);
-    }
+
     let loginId = useRef();
     let password = useRef();
     async function submitLogin(e) {
@@ -51,44 +57,19 @@ export default function () {
                 },
                 body: JSON.stringify(readyPost)
             });
+            let data = await fetchData.json();
+            console.log(data);
             if (fetchData.ok) {
-                let data = await fetchData.json();
-                // if (data?.user?.role === 'owner') {
-                //     let clinic_ids = data.user.clinics
-                //     if (clinic_ids.length === 1) {
-                //         saveEncryptedCookie('clinic_id', clinic_ids[0]?.id)
-                //     } else if (clinic_ids.length > 1) {
-                //         saveEncryptedCookie('clinic_id', 'multi_branch')
-                //     }
-                // } else if (data?.user?.role === 'manager') {
-                //     saveEncryptedCookie('clinic_id', data?.user?.clinic_id)
-                // } else if (data?.user?.role === 'administrator') {
-                //     saveEncryptedCookie('clinic_id', data?.user?.clinic_id)
-                // } else if (data?.user?.role === "accountant") {
-                //     saveEncryptedCookie("clinic_id", data?.user?.clinic_id)
-                // }
-                console.log(data);
-                console.log(data.access);
-                console.log(data.refresh);
-                
                 saveEncryptedCookie('access_token', data.access);
                 const stored_time = new Date().toISOString();
                 saveEncryptedCookie('stored_time', stored_time);
                 saveEncryptedCookie('refresh_token', data.refresh);
                 sessionStorage.setItem('userId', data.user.id)
-                // saveEncryptedCookie('role', data.user.role);
-                // saveEncryptedCookie('user_id', data.user.id);
-
-                // navigate(takeOriginalValue('role') === 'owner' ? '/owner' : takeOriginalValue('role') === 'manager' ? '/admin' : '/doctor');
-                toast.success('Тизимга муваффақиятли кирдингиз')
-                navigateToRole(data.user.type);
-
+                navigateToRole(data.user.type, "Tizimga muvaffaqqiyatli kirdingiz");
             } else {
-                console.error('Login muvaffaqqiyatsiz:', fetchData.status)
-                toast.error("Логин ёки Парол хато", fetchData.status);
+                toast.error(`Login muvaffaqqiyatsiz: ${data?.error}`);
             }
         } catch (error) {
-            console.error('Хатолик юз берди:', error);
             toast.error('Хатолик юз берди', error);
         } finally {
             setIsLoading(false);
@@ -98,6 +79,7 @@ export default function () {
     };
     return (
         <section className="login">
+            <ToastContainer />
             <div className="login_box">
                 <img src={logo} alt="logo" />
                 <h2>Akkauntingizga kiring</h2>
@@ -115,7 +97,7 @@ export default function () {
                 </span>
                 {
                     isLoading === false ?
-                        <button onClick={(e)=>submitLogin(e)} type="button" className="btn_primary">Tizimga kirish</button>
+                        <button onClick={(e) => submitLogin(e)} type="button" className="btn_primary">Tizimga kirish</button>
                         :
                         <button className='Loading' type="button"></button>
                 }

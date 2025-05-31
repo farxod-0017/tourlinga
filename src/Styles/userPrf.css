@@ -58,6 +58,43 @@
     min-width: 64px;
 }
 
+/* Animatsiyali yuklanayotgan holat uchun */
+.btn_primary.loadingB {
+    position: relative;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    background-color: #007bff;
+    border: 2px solid #cce5ff;
+    overflow: hidden;
+}
+
+/* Spinner (aylanuvchi doira) */
+.btn_primary.loadingB::before {
+    content: "";
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid #fff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spinB 0.8s linear infinite;
+    transform: translateY(-50%);
+}
+
+/* Spinner animatsiyasi */
+@keyframes spinB {
+    0% {
+        transform: translateY(-50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translateY(-50%) rotate(360deg);
+    }
+}
+
+
 @media(max-width:1200px) {
     .prf_img .news-upload-box {
         width: 450px;
@@ -93,40 +130,51 @@
         flex-direction: column;
     }
 }
+
 @media(max-width:500px) {
     .prf_img {
         flex-direction: column;
     }
+
     .user_prf {
         padding: 0;
     }
+
     .user_prf .adm_prf {
         min-height: auto;
     }
+
     .user_prf .adm_prf {
         padding: 0px 16px;
     }
+
     .prf_fio span {
         flex-direction: column;
     }
+
     .prf_email {
         flex-direction: column;
         gap: 20px;
     }
+
     .prf_img {
         gap: 20px;
     }
+
     .prf_img .news-upload-box {
         width: calc(100vw - 34px);
     }
+
     .prf_selecs_wrap div {
         flex-direction: column;
         gap: 6px;
     }
+
     .prf_selecs_wrap select {
         max-width: 500px;
     }
-    .prf_upd_can_wrap button:nth-of-type(1)  {
+
+    .prf_upd_can_wrap button:nth-of-type(1) {
         display: none;
     }
 }

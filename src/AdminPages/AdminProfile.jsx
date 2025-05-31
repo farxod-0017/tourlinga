@@ -161,7 +161,7 @@ export default function AdminProfile() {
         const readyD = new FormData();
         readyD.append('first_name', direction_name); // o'rniga input qiymatini qo'ying
         readyD.append("last_name", news_tavsif);
-        if(image) {
+        if (image) {
             readyD.append('image', image);
         }
         readyD.append('email', email);
@@ -282,7 +282,10 @@ export default function AdminProfile() {
             <hr />
             <div className="prf_upd_can_wrap">
                 <button type="button" className='btn_outline'>Bekor qilish</button>
-                <button onClick={(e)=>updateDirec(e)} type="button" className='btn_primary'>Saqlash</button>
+                {isLoading ?
+                    <button type="button" className='btn_primary'>Yuklanmoqda ...</button> :
+                    <button onClick={(e) => updateDirec(e)} type="button" className='btn_primary'>Saqlash</button>
+                }
             </div>
         </div>
     )

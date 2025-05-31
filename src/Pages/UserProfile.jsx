@@ -2,7 +2,7 @@ import '../Styles/userPrf.css'
 import { useCallback, useEffect, useReducer, useState } from "react"
 
 import { mURL } from "../mURL"
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import { toast, ToastContainer } from 'react-toastify';
@@ -50,6 +50,7 @@ export default function UserProfile() {
     // universal blocks
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
     const secret_key = import.meta.env.VITE_SECRET_KEY;
     const takeOriginalValue = useCallback((shifr_key) => {
         const encryptedValue = Cookies.get(shifr_key);
@@ -67,6 +68,18 @@ export default function UserProfile() {
     const [ignore, fourceUpdate] = useReducer(x => x + 1, 0);
 
     // END universal blocks
+
+    // toast login message
+    useEffect(() => {
+        if (location.state?.toastMessage) {
+            toast.success(location.state.toastMessage);
+
+            // 🔄 toast ko‘rsatib bo‘lgach, state'ni tozalash
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [location.state, navigate, location.pathname]);
+
+    // END toast login message
 
     // get unv and faculty
     const [unvs, setUnvs] = useState([]);
@@ -135,9 +148,13 @@ export default function UserProfile() {
 
                     console.log(data);
                 } else if (fetchData.status === 401) {
-                    console.log('Token tekshirilmoqda...');
-                    Cookies.remove('role');
-                    navigate('/')
+                    toast.error('Token yaroqsiz, login sahifasiga yonaltirilmoqda');
+                    setTimeout(() => {
+                        sessionStorage.clear('userId')
+                        Cookies.remove('role');
+                        navigate('/login')
+                    },1500);
+
                 } else {
                     console.log('Xatolik:', fetchData.statusText);
                 }
@@ -219,21 +236,23 @@ export default function UserProfile() {
                     body: readyD
                 });
 
+                const result = await fetchData.json();
                 if (fetchData.ok) {
-                    const result = await fetchData.json();
                     fourceUpdate();
                     setImage(null);
-                    console.log('direction updated sccff:', result);
-
+                    toast.success("Ma'lumotlaringiz muvaffaqqiyatli yangilandi")
                 } else if (fetchData.status === 401) {
-                    console.error('Token yaroqsiz. Login sahifasiga yonaltirilmoqda...');
-                    Cookies.remove('role')
-                    navigate('/');
+                    toast.error('Token yaroqsiz. Login sahifasiga yonaltirilmoqda...');
+                    setTimeout(() => {
+                        sessionStorage.clear('userId')
+                        Cookies.remove('role')
+                        navigate('/login');
+                    }, 1500)
                 } else {
-                    console.log('xatolik yuz berdi:', `${fetchData.statusText} errors, or direction name may be valid.`);
+                    toast.error(`Xatolik: ${result?.error}`)
                 }
             } catch (error) {
-                console.log('Serverga ulanishda xatolik:', error.message);
+                toast.warn(`Serverga ulanishda xatolik: ${error.message}, yoki Internet aloqangizni tekshirib qayta urinib ko'ring `)
             } finally {
                 setIsLoading(false);
             }
@@ -277,6 +296,7 @@ export default function UserProfile() {
 
     return (
         <section className='user_prf'>
+            <ToastContainer />
             <div className='adm_prf'>
                 <div className="theme_head">
                     <ul>
@@ -378,7 +398,11 @@ export default function UserProfile() {
                 <hr />
                 <div className="prf_upd_can_wrap">
                     <button type="button" className='btn_outline'>Bekor qilish</button>
-                    <button onClick={(e) => updateDirec(e)} type="button" className='btn_primary'>Saqlash</button>
+                    {
+                        isLoading ?
+                            <button type="button" className='btn_primary loadingB'>Yuklanmoqda ...</button> :
+                            <button onClick={(e) => updateDirec(e)} type="button" className='btn_primary'>Saqlash</button>
+                    }
                 </div>
             </div>
         </section>

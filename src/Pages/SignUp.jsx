@@ -3,12 +3,11 @@ import logo from "../Images/logo.svg"
 import checked from "../Images/checked.svg"
 import { Link } from "react-router-dom";
 
-import { useCallback, useEffect, useReducer, useState } from "react"
+import { useEffect, useState } from "react"
 import { useRef } from "react";
 import { mURL } from "../mURL"
-import { useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
-import CryptoJS from 'crypto-js';
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function SignUp() {
     const [box, setBox] = useState(1);
@@ -83,6 +82,16 @@ export default function SignUp() {
         //     content: news_tavsif,
         //     image: image
         // };
+        const errors = [
+            { value: password, name: "Parol" },
+            { value: confirmPassword, name: "Parol tasdig‘i" }
+        ].filter((item) => item.value === "");
+
+        if (errors.length > 0) {
+            errors.forEach((e) => toast.warning(`${e.name} kiritilmagan`));
+            return; // funksiyani to'xtatamiz
+        }
+
         let fio = ism.current.value + " " + familiya.current.value
         const readyD = new FormData();
         readyD.append('first_name', ism.current.value);
@@ -121,11 +130,20 @@ export default function SignUp() {
         if (e === 2) {
             if (ism.current.value !== "" && familiya.current.value !== "" && phone.current.value !== "") {
                 setBox(2)
+            } else {
+                [{ value: ism.current.value, name: "Ismingiz" }, { value: familiya.current.value, name: "Familiyangiz" }, { value: phone.current.value, name: "Telefon raqamingiz" }].filter((item) => item.value === "").map((e) => {
+                    return toast.warning(`${e.name} kiritilmagan`);
+                })
+
             }
 
         } else if (e === 3) {
             if (kurs !== "" && faculty !== "" && university !== "") {
                 setBox(3)
+            } else {
+                [{ value: kurs, name: "O'quv kursingiz" }, { value: faculty, name: "Fakultetingiz" }, { value: university, name: "Universitetingiz" }].filter((item) => item.value === "").map((e) => {
+                    return toast.warning(`${e.name} kiritilmagan`);
+                })
             }
         }
     }
@@ -138,6 +156,7 @@ export default function SignUp() {
 
     return (
         <section className="signup">
+            <ToastContainer />
             <div ref={signupModal} className="signup_modal">
                 <div className="signup_modal_window">
                     <img src={checked} alt="" />
@@ -145,7 +164,7 @@ export default function SignUp() {
                     <Link to={"/login"}> <button type="button">Ok</button></Link>
                 </div>
             </div>
-            <form onKeyDown={(e) => preventEnterSubmit(e)}  onSubmit={(e) => createDirection(e)}>
+            <form onKeyDown={(e) => preventEnterSubmit(e)} onSubmit={(e) => createDirection(e)}>
                 <div id={box === 1 ? "open_signbox" : ""} className="sign_box1">
                     <img src={logo} alt="logo" />
                     <h2>Akkaunt ochish</h2>
@@ -166,6 +185,21 @@ export default function SignUp() {
                     <h3>Akkauntingiz bormi? <Link to={"/login"}>Tizimga kiring</Link></h3>
                 </div>
                 <div id={box === 2 ? "open_signbox" : ""} className="sign_box1 sign_box2">
+                    <svg
+                        className="sign_box_back_icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="32"
+                        height="32"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="blue"
+                        strokeWidth="2"
+                        style={{ cursor: 'pointer' }}
+                        onClick={(e) => setBox(1)} // sizning funksiyangiz
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+
                     <img src={logo} alt="logo" />
                     <h2>Akkaunt ochish</h2>
                     <h5>Ma’lumotlaringizni kiriting.</h5>
@@ -206,6 +240,20 @@ export default function SignUp() {
                     <h3>Akkauntingiz bormi? <Link to={"/login"}>Tizimga kiring</Link></h3>
                 </div>
                 <div id={box === 3 ? "open_signbox" : ""} className="sign_box1 sign_box3">
+                    <svg
+                        className="sign_box_back_icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="32"
+                        height="32"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="blue"
+                        strokeWidth="2"
+                        style={{ cursor: 'pointer' }}
+                        onClick={(e) => setBox(2)} // sizning funksiyangiz
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
                     <img src={logo} alt="logo" />
                     <h2>Akkaunt ochish</h2>
                     <h5>Ma’lumotlaringizni kiriting.</h5>
@@ -217,7 +265,12 @@ export default function SignUp() {
                     <h6>Parol 8 sondan iborat bo‘lishi kerak</h6>
                     {
                         match ?
-                            <button className="btn_primary" type="submit">Akkaunt ochish</button>
+                            (
+                                isLoading ?
+                                    <button className='Loading' type="button"></button>
+                                    :
+                                    <button className="btn_primary" type="submit">Akkaunt ochish</button>
+                            )
                             :
                             <button className="btn_primary" type="button"><span>Parollar mos emas</span></button>
                     }

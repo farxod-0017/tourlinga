@@ -2,18 +2,20 @@ import '../AdminCSS/admHome.css'
 import { useCallback, useEffect, useReducer, useState } from "react"
 
 import { mURL } from "../mURL"
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 
 import arrow_up from '../Images/arrow-up.svg'
 import arrow_down from "../Images/arrow-down.svg"
+import { toast, ToastContainer } from 'react-toastify';
 
 
 export default function AdminHome() {
     // universal blocks
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
     const secret_key = import.meta.env.VITE_SECRET_KEY;
     const takeOriginalValue = useCallback((shifr_key) => {
         const encryptedValue = Cookies.get(shifr_key);
@@ -31,6 +33,18 @@ export default function AdminHome() {
     // const [ignore, fourceUpdate] = useReducer(x => x + 1, 0);
 
     // END universal blocks
+
+    // toast login message
+    useEffect(() => {
+        if (location.state?.toastMessage) {
+            toast.success(location.state.toastMessage);
+
+            // 🔄 toast ko‘rsatib bo‘lgach, state'ni tozalash
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [location.state, navigate, location.pathname]);
+
+    // END toast login message
 
     // get Themes
     // Fake NEWS Array
@@ -103,6 +117,7 @@ export default function AdminHome() {
 
     return (
         <div className="adm_home">
+            <ToastContainer />
             <h1>Dashboard</h1>
             <h3>Barcha ma’lumotlar bitta sahifada.</h3>
             <div className="stat_grid">

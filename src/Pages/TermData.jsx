@@ -1,8 +1,4 @@
 import '../Styles/termData.css'
-
-
-import { useRef } from "react"
-
 import { useCallback, useEffect, useReducer, useState } from "react"
 
 import { mURL } from "../mURL"
@@ -10,9 +6,10 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import { useDirecs } from '../context/DirecsContext';
+import AuthRequired from '../components/AuthRequired';
 
 export default function TermData() {
-
+    const [searchType, setSearchType] = useState(true)
     // universal blocks
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
@@ -38,6 +35,7 @@ export default function TermData() {
     const [selectedTmId, setSelectedTmId] = useState(0);
 
     const [direcs, setDirecs] = useState([]);
+    const [orgDirecs, setOrgDirecs] = useState([]);
     const getDirecs = useCallback(async () => {
         const current_time = new Date();
         const stored_time = takeOriginalValue('stored_time');
@@ -53,6 +51,7 @@ export default function TermData() {
                 if (fetchData.ok) {
                     let data = await fetchData.json();
                     setDirecs(data);
+                    setOrgDirecs(data)
                     let first_id = data[0]?.id
                     setSelectedTmId(first_id)
                     console.log(data);
@@ -104,10 +103,13 @@ export default function TermData() {
         getDirecs();
     }, [ignore, getDirecs]);
 
-    // END get news
+    // END get themes
+
+
 
     // get terms
     const [terms, setTerms] = useState([]);
+    const [orgTerms, setOrgTerms] = useState([])
     const getTerms = useCallback(async () => {
         const current_time = new Date();
         const stored_time = takeOriginalValue('stored_time');
@@ -115,6 +117,7 @@ export default function TermData() {
         if (selectedTmId) {
             if (timeDiff < 900) {
                 try {
+                    setIsLoading(true)
                     let fetchData = await fetch(`${mURL}/main/termin-by-mavzu/${selectedTmId}`, {
                         method: 'GET',
                         headers: {
@@ -123,7 +126,8 @@ export default function TermData() {
                     });
                     if (fetchData.ok) {
                         let data = await fetchData.json();
-                        setTerms(data)
+                        setTerms(data);
+                        setOrgTerms(data)
                         console.log(data);
                     } else if (fetchData.status === 401) {
                         console.log('Token tekshirilmoqda...');
@@ -134,6 +138,9 @@ export default function TermData() {
                     }
                 } catch (error) {
                     console.log(`get Directionsda xatolik:, error`);
+                }
+                finally {
+                    setIsLoading(false)
                 }
             } else {
                 // Token muddati tugagan, refresh orqali yangi token olish
@@ -176,6 +183,50 @@ export default function TermData() {
 
     // END get terms
 
+    // Filtrlash funksiyasi
+    const [searchText, setSearchText] = useState('')
+    const filterPatients = useCallback(() => {
+        if (searchType) {
+            let result = [...orgDirecs];
+
+            // Ism bo'yicha filtrlash
+            if (searchText) {
+                result = result.filter((patient) =>
+                    patient.name.toLowerCase().includes(searchText.toLowerCase())
+                );
+            }
+            // Filterlangan ro'yxatni faqat o'zgargan holatda yangilash
+            if (JSON.stringify(result) !== JSON.stringify(direcs)) {
+                setDirecs(result);
+            }
+        } else {
+            let result = [...orgTerms];
+
+            // Ism bo'yicha filtrlash
+            if (searchText) {
+                result = result.filter((patient) =>
+                    patient.engw.toLowerCase().includes(searchText.toLowerCase())
+                );
+            }
+            // Filterlangan ro'yxatni faqat o'zgargan holatda yangilash
+            if (JSON.stringify(result) !== JSON.stringify(terms)) {
+                setTerms(result);
+            }
+        }
+
+    }, [direcs, orgDirecs, searchText, terms, orgTerms]);
+
+    // "va" qizil rangga kirish funksiyasi
+    const highlightText = (text, search) => {
+        if (!text || !search) return text;
+        const regex = new RegExp(`(${search})`, "gi");
+        return text.toString().replace(regex, `<span class="highlight">$1</span>`);
+    };
+    useEffect(() => {
+        filterPatients();
+    }, [filterPatients]);
+    // Filters For Full Visits END
+
     // global state
     const info = useDirecs()
     // global state END
@@ -202,23 +253,39 @@ export default function TermData() {
                                         fill="#717680"
                                     />
                                 </svg>
-                                <li>{selectedTmId ? direcs?.find((item) => item.id === selectedTmId).name : "Barchasi"}</li>
+                                <li>{selectedTmId ? orgDirecs?.find((item) => item.id === selectedTmId).name : "Barchasi"}</li>
                             </ul>
                             <h1>Terminlar</h1>
                         </div>
                         <div className="theme_body">
-                            <input type="text" placeholder='Qidirish' />
+                            <div className="term_search_wrap">
+                                <div>
+                                    <span className={searchType ? "selectedTheme" : ""} onClick={() => setSearchType(true)}>Mavzu</span>
+                                    <span className={!searchType ? "selectedTheme" : ""} onClick={() => setSearchType(false)}>Termin</span>
+                                </div>
+                                <input value={searchText} onChange={(e) => setSearchText(e.target.value)} type="text" placeholder='Qidirish' />
+                            </div>
                             <ul>
                                 {direcs?.map((item) => {
                                     return (
-                                        <li className={item.id === selectedTmId ? "selectedTheme" : ""} onClick={(e) => setSelectedTmId(item.id)} key={item.id}>{item.name}</li>
+                                        <li
+                                            className={item.id === selectedTmId ? "selectedTheme" : ""}
+                                            onClick={(e) => setSelectedTmId(item.id)}
+                                            key={item.id}
+
+                                            dangerouslySetInnerHTML={{
+                                                __html: searchType ? highlightText(item.name, searchText) : item.name,
+                                            }}
+                                        >
+
+                                        </li>
                                     )
                                 })}
                             </ul>
                         </div>
                     </div>
                     <div className="terms_body">
-                        <h2>{selectedTmId ? direcs?.find((item) => item.id === selectedTmId).name : "Barchasi"}</h2>
+                        <h2>{selectedTmId ? orgDirecs?.find((item) => item.id === selectedTmId).name : "Barchasi"}</h2>
                         <div className="terms_body_head">
                             <nav>
                                 <NavLink to={"/terms"}>Terminlar</NavLink>
@@ -227,8 +294,12 @@ export default function TermData() {
                             <h4>To‘plangan ballar: <span>{info?.ball ? info?.ball : "0"}</span></h4>
                         </div>
                         <div className="terms_grid">
-                            {terms?.length === 0 ?
-                                <h6>Bu mavzu uchun Terminlar yuklanmagan</h6> :
+                            {isLoading ?
+                                <button type="button" className='btn_primary loadingB term_loading_btn'>Yuklanmoqda ...</button>  : 
+                                !isLoading && !searchType && searchText === "" && terms?.length === 0 ?
+                                <button type="button" className='no_upload_message'>Bu mavzu uchun Terminlar yuklanmagan</button> 
+                                : !isLoading && searchText !=="" && !searchType && terms?.length === 0 ?
+                                <button type="button" className='no_search_result_message'>Qidiruv natijalari topilmadi</button> :
                                 <noscript></noscript>
                             }
                             {terms?.map((item) => {
@@ -236,13 +307,22 @@ export default function TermData() {
                                     <div key={item.id} className="terms_wrap">
                                         <div className="terms_box">
                                             <h5>Ingliz</h5>
-                                            <h3>{item.engw}</h3>
+                                            <h3
+                                                dangerouslySetInnerHTML={{
+                                                    __html: !searchType ? highlightText(item.engw, searchText) : item.engw,
+                                                }}
+                                            >
+
+                                            </h3>
                                             <p>{item.engwt}</p>
                                             <a href={item.link} target="_blank" rel="noopener noreferrer">
                                                 {item.link}
                                             </a>
-                                            <img src={item.image} alt="image of word" />
-                                        </div>
+                                            {item.image ?
+                                                <img src={item.image} alt="image of word" />
+                                                :
+                                                <noscript></noscript>
+                                            }                                        </div>
                                         <div className="terms_box">
                                             <h5>O‘zbek</h5>
                                             <h3>{item.uzbw}</h3>
@@ -250,7 +330,11 @@ export default function TermData() {
                                             <a href={item.link} target="_blank" rel="noopener noreferrer">
                                                 {item.link}
                                             </a>
-                                            <img src={item.image} alt="image of word" />
+                                            {item.image ?
+                                                <img src={item.image} alt="image of word" />
+                                                :
+                                                <noscript></noscript>
+                                            }
                                         </div>
                                     </div>
                                 )
@@ -259,9 +343,7 @@ export default function TermData() {
                     </div>
                 </section>
                 :
-                <div className="stat_no_login">
-                    <h4>Iltimos Terminlar sahifasini kuzatish uchun tizimdan ro'yhatdan o'ting</h4>
-                </div>
+                <AuthRequired pageName={"Terminlar"} />
             }
         </div>
 

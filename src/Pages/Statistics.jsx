@@ -17,11 +17,12 @@ import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import { toast, ToastContainer } from 'react-toastify';
 import { useDirecs } from "../context/DirecsContext"
+import AuthRequired from "../components/AuthRequired"
 
 export default function Statistics() {
 
     // universal blocks
-    
+
     const navigate = useNavigate();
     const secret_key = import.meta.env.VITE_SECRET_KEY;
     const takeOriginalValue = useCallback((shifr_key) => {
@@ -348,7 +349,7 @@ export default function Statistics() {
 
     return (
         <div className="full_stat">
-            { sessionStorage.getItem('userId') ?
+            {sessionStorage.getItem('userId') ?
                 <section className="adm_news adm_stud user_stat">
                     <span className="user_stat_nav">
                         <NavLink to={'/'}>Bosh sahifa</NavLink>
@@ -469,7 +470,7 @@ export default function Statistics() {
                         >
 
                             <img src={left_pagin} alt="" />
-                            <span>Oldingi</span> 
+                            <span>Oldingi</span>
                         </button>
                         <div>
                             <span>{currentPage}/{totalPages}</span>
@@ -487,9 +488,7 @@ export default function Statistics() {
                     </div>
                 </section>
                 :
-                <div className="stat_no_login">
-                    <h4>Iltimos Statistika sahifasini kuzatish uchun tizimdan ro'yhatdan o'ting</h4>
-                </div>
+                <AuthRequired pageName={"Statistika"} />
             }
         </div>
 

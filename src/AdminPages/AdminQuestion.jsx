@@ -66,19 +66,6 @@ export default function AdminQuestions() {
     }, [secret_key]);
     const [ignore, fourceUpdate] = useReducer(x => x + 1, 0);
 
-    const formatDate = (isoString) => {
-        const date = new Date(isoString);
-
-        // Mahalliy vaqt zonasi bo'yicha o'qiladi
-        return date.toLocaleString("uz-UZ", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-        });
-    };
-
     // END universal blocks
 
     const [termTheme, setTermTheme] = useState(0);

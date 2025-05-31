@@ -282,6 +282,12 @@
     background-color: #FDA29B;
 }
 
+@media(min-width:1400px) {
+    .terms_wrap .terms_box {
+        min-width: 441px;
+    }
+}
+
 @media(max-width:1400px) {
     .theme_bar {
         width: 290px;
